@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Operaciones - Mayabus</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js for graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+        }
+        .kpi-card {
+            transition: all 0.3s ease;
+            border-left-width: 4px;
+        }
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .filter-btn.active {
+            background-color: #1d4ed8;
+            color: white;
+            font-weight: 600;
+        }
+        .filter-btn {
+            transition: all 0.2s ease;
+        }
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+        }
+        /* Chat styles */
+        #chat-container {
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        }
+        .chat-message {
+            max-width: 80%;
+        }
+        .gemini-btn {
+            transition: all 0.3s ease;
+        }
+        .gemini-btn:hover {
+            box-shadow: 0 0 15px rgba(79, 70, 229, 0.5);
+        }
+    </style>
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="p-4 sm:p-6 md:p-8">
+    <div class="max-w-7xl mx-auto bg-white rounded-2xl shadow-lg p-6 md:p-8">
+        
+        <!-- Header -->
+        <header class="border-b border-gray-200 pb-6 mb-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-800">Dashboard de Operaciones Mayabus</h1>
+                    <p class="text-md text-gray-500 mt-1">Análisis de rendimiento 2024 vs. 2025 y proyecciones para 2026.</p>
+                </div>
+                <div class="flex items-center mt-4 sm:mt-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-600 mr-2"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 7.6 16 5 12 5s-6.7 2.6-8.5 6.1C2.7 11.3 2 12.1 2 13v3c0 .6.4 1 1 1h2"/><path d="M12 10v12"/><path d="M8 16l4-4 4 4"/></svg>
+                    <span class="font-semibold text-gray-700">Rol: Experto en Data Analytics</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Filters -->
+        <div class="flex flex-wrap gap-x-8 gap-y-4 mb-8">
+            <!-- Year and Month Filters -->
+            <div class="flex items-center space-x-4 bg-gray-100 p-2 rounded-lg">
+                <span class="font-semibold text-gray-700 ml-2">Año:</span>
+                <div id="year-filter">
+                    <button data-year="2024" class="filter-btn px-3 py-1 rounded-md text-sm">2024</button>
+                    <button data-year="2025" class="filter-btn px-3 py-1 rounded-md text-sm active">2025</button>
+                    <button data-year="ambos" class="filter-btn px-3 py-1 rounded-md text-sm">Ambos</button>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4 bg-gray-100 p-2 rounded-lg">
+                <span class="font-semibold text-gray-700 ml-2">Mes:</span>
+                <div id="month-filter-container">
+                    <!-- Month buttons will be dynamically generated -->
+                </div>
+            </div>
+            <!-- Day and Time Filters -->
+            <div class="flex items-center space-x-4 bg-gray-100 p-2 rounded-lg">
+                <span class="font-semibold text-gray-700 ml-2">Día:</span>
+                <div id="day-filter">
+                    <button data-day="Todos" class="filter-btn px-3 py-1 rounded-md text-sm active">Todos</button>
+                    <button data-day="L-V" class="filter-btn px-3 py-1 rounded-md text-sm">L-V</button>
+                    <button data-day="Sábado" class="filter-btn px-3 py-1 rounded-md text-sm">Sábado</button>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4 bg-gray-100 p-2 rounded-lg">
+                <span class="font-semibold text-gray-700 ml-2">Horario:</span>
+                <div id="time-filter">
+                    <button data-time="Todos" class="filter-btn px-3 py-1 rounded-md text-sm active">Todos</button>
+                    <button data-time="Mañana" class="filter-btn px-3 py-1 rounded-md text-sm">Mañana</button>
+                    <button data-time="Tarde" class="filter-btn px-3 py-1 rounded-md text-sm">Tarde</button>
+                    <button data-time="Noche" class="filter-btn px-3 py-1 rounded-md text-sm">Noche</button>
+                </div>
+            </div>
+             <!-- File Upload & Download -->
+            <div class="flex items-center gap-4">
+                <input type="file" id="csv-upload" class="hidden" accept=".csv">
+                <button id="upload-btn" class="flex items-center space-x-2 bg-green-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-green-700 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    <span>Cargar</span>
+                </button>
+                <button id="download-btn" class="flex items-center space-x-2 bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    <span>Descargar Reporte</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- KPIs Section -->
+        <section id="kpi-section" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <!-- KPI Cards will be injected by JS -->
+        </section>
+
+        <!-- Charts Section -->
+        <section class="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-8">
+            <div class="lg:col-span-3 bg-gray-50 p-6 rounded-lg">
+                <h3 id="passengers-chart-title" class="text-lg font-semibold text-gray-700 mb-4"></h3>
+                <canvas id="passengersChart"></canvas>
+            </div>
+            <div class="lg:col-span-2 bg-gray-50 p-6 rounded-lg">
+                <h3 id="trip-type-chart-title" class="text-lg font-semibold text-gray-700 mb-4"></h3>
+                <canvas id="tripTypeChart"></canvas>
+            </div>
+        </section>
+        
+        <section class="bg-gray-50 p-6 rounded-lg mb-8">
+            <div class="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-4">
+                <h3 id="ticket-validations-by-route-chart-title" class="text-lg font-semibold text-gray-700"></h3>
+                <div class="flex items-center gap-4">
+                    <select id="route-filter" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                        <option value="todas">Todas las rutas</option>
+                    </select>
+                    <button id="sort-order-btn" data-order="desc" class="p-2.5 bg-white border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-100">
+                        <!-- Icon will be injected by JS -->
+                    </button>
+                </div>
+            </div>
+             <canvas id="ticketValidationsByRouteChart"></canvas>
+        </section>
+        
+        <section class="bg-gray-50 p-6 rounded-lg mb-8">
+            <div class="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-4">
+                <h3 id="occupancy-by-hour-chart-title" class="text-lg font-semibold text-gray-700"></h3>
+                 <div class="flex items-center gap-4">
+                    <select id="hourly-route-filter" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                        <!-- Options will be populated by JS -->
+                    </select>
+                </div>
+            </div>
+            <canvas id="occupancyByHourChart"></canvas>
+        </section>
+
+        <!-- Gemini Features Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Recommendations Section -->
+            <section class="bg-indigo-50 border-l-4 border-indigo-500 p-6 rounded-lg">
+                <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-4">
+                    <div class="flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-600 mr-3 flex-shrink-0 h-6 w-6"><path d="M15.042 21.672L13.684 16.6s.402-1.238-.696-1.638c-1.1-.4-1.638.696-1.638.696L5.672 21.042c-.3.3-.3.8 0 1.1.3.3.8.3 1.1 0l2.828-2.828l2.122 2.122c.15.15.353.22.565.22s.416-.07.566-.22l2.122-2.122 2.828 2.828c.3.3.8.3 1.1 0 .3-.3.3-.8 0-1.1z"/><path d="m18.153 11.412-8.34-8.34a.5.5 0 0 0-.708 0l-2.12 2.12a.5.5 0 0 0 0 .708l8.34 8.34a.5.5 0 0 0 .708 0l2.12-2.12a.5.5 0 0 0 0-.708z"/></svg>
+                        <h2 class="text-xl font-bold text-indigo-800">Análisis y Recomendaciones</h2>
+                    </div>
+                    <button id="generate-insights-btn" class="gemini-btn mt-3 sm:mt-0 flex items-center justify-center px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700">
+                        ✨ Generar Análisis con IA
+                    </button>
+                </div>
+                <div id="insights-content" class="text-indigo-900">
+                    <p>Haz clic para generar un análisis de los datos seleccionados.</p>
+                </div>
+            </section>
+             <!-- Prediction Section -->
+            <section class="bg-purple-50 border-l-4 border-purple-500 p-6 rounded-lg">
+                <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-4">
+                    <div class="flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-600 mr-3 flex-shrink-0 h-6 w-6"><path d="M2.5 8.5A6 6 0 0 1 8.5 2.5c2.5 0 4.64 1.4 5.65 3.44"/><path d="M15.5 8.5A6 6 0 0 1 21.5 2.5c-2.5 0-4.64 1.4-5.65 3.44"/><path d="M8.5 21.5a6 6 0 0 1-6-6c0-2.5 1.4-4.64 3.44-5.65"/><path d="M15.5 21.5a6 6 0 0 1-6-6c0-2.5 1.4-4.64 3.44-5.65"/></svg>
+                        <h2 class="text-xl font-bold text-purple-800">Predicción de Demanda 2026</h2>
+                    </div>
+                    <button id="predict-demand-btn" class="gemini-btn mt-3 sm:mt-0 flex items-center justify-center px-4 py-2 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700">
+                        ✨ Predecir Demanda para 2026
+                    </button>
+                </div>
+                <div id="prediction-content" class="text-purple-900">
+                    <p>Haz clic para generar un pronóstico para 2026 basado en las tendencias.</p>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Chat Button -->
+    <button id="chat-toggle-btn" class="gemini-btn fixed bottom-6 right-6 bg-indigo-600 text-white p-4 rounded-full shadow-lg hover:bg-indigo-700 transition-transform transform hover:scale-110">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 21 1.65-3.8a9 9 0 1 1 3.4 2.9l-5.05.9z"/><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1z"/><path d="M15 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1z"/><path d="M12 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1z"/></svg>
+    </button>
+
+    <!-- Chat Modal -->
+    <div id="chat-container" class="fixed bottom-24 right-6 w-full max-w-md h-full max-h-[600px] bg-white rounded-lg shadow-2xl flex flex-col transform translate-y-8 opacity-0 pointer-events-none">
+        <div class="flex justify-between items-center p-4 bg-indigo-600 text-white rounded-t-lg">
+            <h3 class="font-semibold text-lg">Chatear con Asistente IA</h3>
+            <button id="chat-close-btn" class="text-white hover:text-gray-200">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+        <div id="chat-messages" class="flex-1 p-4 overflow-y-auto bg-gray-50">
+            <!-- Messages will be injected here -->
+        </div>
+        <div class="p-4 border-t border-gray-200">
+            <div class="flex items-center">
+                <input type="text" id="chat-input" placeholder="Haz una pregunta sobre los datos..." class="flex-1 border border-gray-300 rounded-lg p-2 focus:ring-indigo-500 focus:border-indigo-500">
+                <button id="chat-send-btn" class="ml-3 bg-indigo-600 text-white p-2 rounded-lg hover:bg-indigo-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // --- DATA SIMULATION BASED ON PROVIDED CSVs ---
+        let allTrips = [
+            // 2025 Data
+            { year: 2025, month: 'junio', day: 'L-V', time: 'Mañana', hour: 7, type: 'Entrada', route: 'Américas-Fco. de Montejo-Cd. Caucel', passengers: 30, tickets: 30, occupancy: 67 },
+            { year: 2025, month: 'junio', day: 'L-V', time: 'Tarde', hour: 14, type: 'Salida', route: 'Prolongación-Calle 60', passengers: 25, tickets: 24, occupancy: 56 },
+            { year: 2025, month: 'junio', day: 'Sábado', time: 'Mañana', hour: 8, type: 'Entrada', route: 'Altabrisa - Pocito - City Center', passengers: 15, tickets: 15, occupancy: 33 },
+            { year: 2025, month: 'junio', day: 'L-V', time: 'Mañana', hour: 9, type: 'Entrada', route: 'El Pocito (Entrada)', passengers: 5, tickets: 5, occupancy: 11 },
+            { year: 2025, month: 'junio', day: 'L-V', time: 'Noche', hour: 20, type: 'Salida', route: 'Américas-Fco. de Montejo-Cd. Caucel', passengers: 22, tickets: 22, occupancy: 49 },
+            { year: 2025, month: 'julio', day: 'L-V', time: 'Mañana', hour: 7, type: 'Entrada', route: 'Américas-Fco. de Montejo-Cd. Caucel', passengers: 35, tickets: 34, occupancy: 78 },
+            { year: 2025, month: 'julio', day: 'L-V', time: 'Tarde', hour: 15, type: 'Salida', route: 'Prolongación-Calle 60', passengers: 28, tickets: 28, occupancy: 62 },
+            { year: 2025, month: 'julio', day: 'Sábado', time: 'Mañana', hour: 9, type: 'Entrada', route: 'Altabrisa - Pocito - City Center', passengers: 18, tickets: 18, occupancy: 40 },
+            { year: 2025, month: 'julio', day: 'L-V', time: 'Noche', hour: 21, type: 'Salida', route: 'Calle 60', passengers: 12, tickets: 12, occupancy: 27 },
+            { year: 2025, month: 'julio', day: 'L-V', time: 'Mañana', hour: 8, type: 'Entrada', route: 'Fco. Montejo', passengers: 20, tickets: 19, occupancy: 42 },
+
+            // 2024 Data
+            { year: 2024, month: 'junio', day: 'L-V', time: 'Mañana', hour: 7, type: 'Entrada', route: 'Américas-Fco. de Montejo-Cd. Caucel', passengers: 22, tickets: 22, occupancy: 49 },
+            { year: 2024, month: 'junio', day: 'L-V', time: 'Tarde', hour: 14, type: 'Salida', route: 'Prolongación-Calle 60', passengers: 18, tickets: 17, occupancy: 40 },
+            { year: 2024, month: 'junio', day: 'Sábado', time: 'Mañana', hour: 8, type: 'Entrada', route: 'Altabrisa - Pocito - City Center', passengers: 10, tickets: 10, occupancy: 22 },
+            { year: 2024, month: 'junio', day: 'L-V', time: 'Noche', hour: 20, type: 'Salida', route: 'El Pocito (Entrada)', passengers: 4, tickets: 4, occupancy: 9 },
+            { year: 2024, month: 'julio', day: 'L-V', time: 'Mañana', hour: 7, type: 'Entrada', route: 'Américas-Fco. de Montejo-Cd. Caucel', passengers: 25, tickets: 25, occupancy: 56 },
+            { year: 2024, month: 'julio', day: 'L-V', time: 'Tarde', hour: 15, type: 'Salida', route: 'Prolongación-Calle 60', passengers: 20, tickets: 20, occupancy: 44 },
+            { year: 2024, month: 'julio', day: 'Sábado', time: 'Mañana', hour: 9, type: 'Entrada', route: 'Altabrisa - Pocito - City Center', passengers: 12, tickets: 12, occupancy: 27 },
+            { year: 2024, month: 'julio', day: 'L-V', time: 'Tarde', hour: 16, type: 'Entrada', route: 'Calle 60', passengers: 15, tickets: 15, occupancy: 33 },
+        ];
+
+
+        // --- CHART & DASHBOARD LOGIC ---
+        document.addEventListener('DOMContentLoaded', () => {
+            let filters = {
+                year: '2025',
+                month: 'julio',
+                day: 'Todos',
+                time: 'Todos'
+            };
+
+            const chartContexts = {
+                passengers: document.getElementById('passengersChart').getContext('2d'),
+                tripType: document.getElementById('tripTypeChart').getContext('2d'),
+                ticketValidationsByRoute: document.getElementById('ticketValidationsByRouteChart').getContext('2d'),
+                occupancyByHour: document.getElementById('occupancyByHourChart').getContext('2d')
+            };
+            
+            let charts = {};
+
+            const icons = {
+                sortDesc: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h18M3 8h12M3 12h8m-5 4h12M3 20h4"/></svg>`,
+                sortAsc: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h4m11-16h-4M3 16h12M3 12h8M3 8h18M3 4h18"/></svg>`
+            };
+
+            function createCharts() {
+                charts.passengers = new Chart(chartContexts.passengers, { type: 'bar', data: {}, options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, title: { display: true, text: 'Número de Pasajeros' } }, y1: { type: 'linear', display: true, position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: 'Ocupación (%)' } } } } });
+                charts.tripType = new Chart(chartContexts.tripType, { type: 'doughnut', data: {}, options: { responsive: true, plugins: { legend: { position: 'top' } } } });
+                charts.ticketValidationsByRoute = new Chart(chartContexts.ticketValidationsByRoute, { type: 'bar', data: {}, options: { indexAxis: 'y', responsive: true, plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => `${c.dataset.label || ''}: ${c.parsed.x.toFixed(1)}%` } } }, scales: { x: { beginAtZero: true, max: 100, title: { display: true, text: '% Ocupación Promedio (Capacidad 50)' } } } } });
+                charts.occupancyByHour = new Chart(chartContexts.occupancyByHour, { type: 'bar', data: {}, options: { responsive: true, plugins: { legend: { display: true, position: 'top' } }, scales: { y: { beginAtZero: true, max: 100, title: { display: true, text: '% Ocupación Promedio' } } }, plugins: { tooltip: { callbacks: { label: (c) => `${c.dataset.label || ''} a las ${c.label}: ${c.parsed.y.toFixed(1)}%` } } } } });
+            }
+
+            function populateRouteFilters() {
+                const routeFilter1 = document.getElementById('route-filter');
+                const routeFilter2 = document.getElementById('hourly-route-filter');
+                const allRoutes = [...new Set(allTrips.map(trip => trip.route))].sort();
+
+                [routeFilter1, routeFilter2].forEach(filter => {
+                    const selectedValue = filter.value;
+                    const hasAllOption = filter.id === 'route-filter' || filter.querySelector('option[value="todas"]');
+                    
+                    while (filter.options.length > (hasAllOption ? 1 : 0)) {
+                        filter.remove(filter.options.length - 1);
+                    }
+
+                    if (filter.id === 'hourly-route-filter' && !hasAllOption) {
+                        const allOption = document.createElement('option');
+                        allOption.value = 'todas';
+                        allOption.textContent = 'Todas las rutas';
+                        filter.appendChild(allOption);
+                    }
+
+                    allRoutes.forEach(route => {
+                        const option = document.createElement('option');
+                        option.value = route;
+                        option.textContent = route;
+                        filter.appendChild(option);
+                    });
+                    
+                    if (selectedValue && [...filter.options].some(o => o.value === selectedValue)) {
+                        filter.value = selectedValue;
+                    } else if (filter.id === 'hourly-route-filter') {
+                        filter.value = 'todas';
+                    }
+                });
+            }
+            
+            function getFilteredData(year = filters.year, month = filters.month, day = filters.day, time = filters.time) {
+                 return allTrips.filter(trip => {
+                    const yearMatch = year === 'ambos' || trip.year == year;
+                    const monthMatch = month === 'ambos' || trip.month === month;
+                    const dayMatch = day === 'Todos' || trip.day === day;
+                    const timeMatch = time === 'Todos' || trip.time === time;
+                    return yearMatch && monthMatch && dayMatch && timeMatch;
+                });
+            }
+            
+            function aggregateData(data) {
+                 const kpis = data.reduce((acc, trip) => {
+                    acc.pasajeros += trip.passengers;
+                    acc.tickets += trip.tickets;
+                    acc.viajes += 1;
+                    acc.totalOccupancy += trip.occupancy;
+                    return acc;
+                }, { pasajeros: 0, tickets: 0, viajes: 0, totalOccupancy: 0 });
+                kpis.ocupacion = kpis.viajes > 0 ? kpis.totalOccupancy / kpis.viajes : 0;
+                return kpis;
+            }
+
+            function updateUI() {
+                const filteredData = getFilteredData();
+                const kpis = aggregateData(filteredData);
+                
+                const prevYear = String(parseInt(filters.year) - 1);
+                const prevYearFilteredData = getFilteredData(prevYear, filters.month, filters.day, filters.time);
+                const kpisPrevYear = aggregateData(prevYearFilteredData);
+
+                updateKPIs(kpis, kpisPrevYear);
+                updatePassengersChart();
+                
+                const tripTypeData = filteredData.reduce((acc, trip) => {
+                    acc[trip.type] = (acc[trip.type] || 0) + trip.passengers;
+                    return acc;
+                }, {});
+
+                updateGenericChart('tripType', { labels: Object.keys(tripTypeData), data: Object.values(tripTypeData) }, `Distribución de Pasajeros`);
+                updateTicketValidationsChart();
+                updateOccupancyByHourChart();
+                
+                document.querySelectorAll('#year-filter button').forEach(b => b.classList.toggle('active', b.dataset.year === filters.year));
+                document.querySelectorAll('#month-filter-container button').forEach(b => b.classList.toggle('active', b.dataset.month === filters.month));
+                document.querySelectorAll('#day-filter button').forEach(b => b.classList.toggle('active', b.dataset.day === filters.day));
+                document.querySelectorAll('#time-filter button').forEach(b => b.classList.toggle('active', b.dataset.time === filters.time));
+            }
+
+            function formatChange(newValue, oldValue) {
+                if (oldValue === 0) return { text: 'N/A', color: 'text-gray-500' };
+                const change = ((newValue - oldValue) / oldValue) * 100;
+                const isPositive = change >= 0;
+                return { text: `${isPositive ? '+' : ''}${change.toFixed(1)}%`, color: isPositive ? 'text-green-600' : 'text-red-600' };
+            }
+
+            function formatChangePoints(newValue, oldValue) {
+                const change = newValue - oldValue;
+                const isPositive = change >= 0;
+                return { text: `${isPositive ? '+' : ''}${change.toFixed(1)} pts`, color: isPositive ? 'text-green-600' : 'text-red-600' };
+            }
+
+            function createKpiCard(title, value, changeText, changeColor, iconSvg) {
+                const comparisonHtml = filters.year === '2025' ? `<p class="text-sm font-semibold ${changeColor}">${changeText} vs. 2024</p>` : '<p class="text-sm">&nbsp;</p>';
+                return `
+                    <div class="kpi-card bg-white p-5 rounded-lg shadow-sm border-l-blue-500">
+                        <div class="flex items-center justify-between">
+                            <p class="text-sm font-medium text-gray-500">${title}</p>
+                            <div class="bg-blue-100 text-blue-600 p-2 rounded-full">${iconSvg}</div>
+                        </div>
+                        <div class="mt-2">
+                            <p class="text-3xl font-bold text-gray-800">${value.toLocaleString('es-MX')}</p>
+                            ${comparisonHtml}
+                        </div>
+                    </div>
+                `;
+            }
+
+            function updateKPIs(kpis, kpisPrevYear) {
+                const kpiContainer = document.getElementById('kpi-section');
+                const kpiIcons = {
+                    pasajeros: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
+                    ocupacion: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 12l5 3"/><path d="M12 6v6"/></svg>`,
+                    viajes: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 22H8a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2h-2"/><path d="M15 2v20"/><path d="M2.5 12H10"/><path d="M21.5 12H15"/></svg>`,
+                    tickets: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>`
+                };
+                const pChange = formatChange(kpis.pasajeros, kpisPrevYear.pasajeros);
+                const oChange = formatChangePoints(kpis.ocupacion, kpisPrevYear.ocupacion);
+                const vChange = formatChange(kpis.viajes, kpisPrevYear.viajes);
+                const tChange = formatChange(kpis.tickets, kpisPrevYear.tickets);
+
+                kpiContainer.innerHTML = [
+                    createKpiCard(`Pasajeros`, kpis.pasajeros, pChange.text, pChange.color, kpiIcons.pasajeros),
+                    createKpiCard(`Ocupación`, `${kpis.ocupacion.toFixed(1)}%`, oChange.text, oChange.color, kpiIcons.ocupacion),
+                    createKpiCard(`Viajes`, kpis.viajes, vChange.text, vChange.color, kpiIcons.viajes),
+                    createKpiCard(`Tickets`, kpis.tickets, tChange.text, tChange.color, kpiIcons.tickets)
+                ].join('');
+            }
+            
+            function updatePassengersChart() {
+                const kpis2025 = aggregateData(getFilteredData('2025', filters.month, filters.day, filters.time));
+                const kpis2024 = aggregateData(getFilteredData('2024', filters.month, filters.day, filters.time));
+                
+                document.getElementById('passengers-chart-title').textContent = `Comparativa de Pasajeros y Ocupación`;
+                charts.passengers.data = {
+                    labels: ['2024', '2025'],
+                    datasets: [
+                        { label: 'Pasajeros', data: [kpis2024.pasajeros, kpis2025.pasajeros], backgroundColor: 'rgba(37, 99, 235, 0.8)', yAxisID: 'y' },
+                        { label: 'Ocupación', data: [kpis2024.ocupacion, kpis2025.ocupacion], type: 'line', borderColor: 'rgba(234, 179, 8, 1)', backgroundColor: 'rgba(234, 179, 8, 0.2)', yAxisID: 'y1', tension: 0.3 }
+                    ]
+                };
+                if (filters.year === 'ambos') {
+                    charts.passengers.data.datasets[1].data = [kpis2024.ocupacion, kpis2025.ocupacion];
+                }
+                charts.passengers.update();
+            }
+
+            function updateTicketValidationsChart() {
+                const title = `Ocupación Promedio por Ruta (Basado en 50 Asientos)`;
+                document.getElementById('ticket-validations-by-route-chart-title').textContent = title;
+                
+                const filteredData = getFilteredData();
+                let dataByRoute = filteredData.reduce((acc, trip) => {
+                    if (!acc[trip.route]) {
+                        acc[trip.route] = { totalTickets: 0, tripCount: 0 };
+                    }
+                    acc[trip.route].totalTickets += trip.tickets;
+                    acc[trip.route].tripCount += 1;
+                    return acc;
+                }, {});
+
+                let data = Object.entries(dataByRoute).map(([route, values]) => {
+                    const avgTickets = values.tripCount > 0 ? values.totalTickets / values.tripCount : 0;
+                    return { route, percentage: (avgTickets / 50) * 100 };
+                });
+
+                const selectedRoute = document.getElementById('route-filter').value;
+                const sortOrder = document.getElementById('sort-order-btn').dataset.order;
+
+                if (selectedRoute !== 'todas') {
+                    data = data.filter(item => item.route === selectedRoute);
+                }
+
+                data.sort((a, b) => sortOrder === 'desc' ? b.percentage - a.percentage : a.percentage - b.percentage);
+                
+                charts.ticketValidationsByRoute.data = {
+                    labels: data.map(d => d.route),
+                    datasets: [{
+                        label: '% Ocupación Promedio',
+                        data: data.map(d => d.percentage),
+                        backgroundColor: 'rgba(217, 70, 239, 0.8)',
+                        borderColor: 'rgba(217, 70, 239, 1)',
+                        borderWidth: 1
+                    }]
+                };
+                charts.ticketValidationsByRoute.update();
+            }
+
+            function updateOccupancyByHourChart() {
+                const selectedRoute = document.getElementById('hourly-route-filter').value;
+                const title = `Ocupación por Hora y Día para: ${selectedRoute === 'todas' ? 'Todas las Rutas' : selectedRoute}`;
+                document.getElementById('occupancy-by-hour-chart-title').textContent = title;
+
+                let filteredData = getFilteredData();
+                if (selectedRoute !== 'todas') {
+                    filteredData = filteredData.filter(trip => trip.route === selectedRoute);
+                }
+                
+                const dataByHourAndDay = filteredData.reduce((acc, trip) => {
+                    const key = `${trip.hour}-${trip.day}`;
+                    if (!acc[key]) {
+                        acc[key] = { totalOccupancy: 0, count: 0, hour: trip.hour, day: trip.day };
+                    }
+                    acc[key].totalOccupancy += trip.occupancy;
+                    acc[key].count++;
+                    return acc;
+                }, {});
+
+                const allHours = [...new Set(allTrips.map(t => t.hour))].sort((a, b) => a - b);
+                const labels = allHours.map(h => `${h}:00`);
+
+                const lvData = new Array(allHours.length).fill(null);
+                const sabadoData = new Array(allHours.length).fill(null);
+
+                Object.values(dataByHourAndDay).forEach(value => {
+                    const avgOccupancy = value.totalOccupancy / value.count;
+                    const index = allHours.indexOf(value.hour);
+                    if (index > -1) {
+                        if (value.day === 'L-V') {
+                            lvData[index] = avgOccupancy;
+                        } else if (value.day === 'Sábado') {
+                            sabadoData[index] = avgOccupancy;
+                        }
+                    }
+                });
+
+                charts.occupancyByHour.data = {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Lunes a Viernes',
+                            data: lvData,
+                            backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                            borderColor: 'rgba(59, 130, 246, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Sábado',
+                            data: sabadoData,
+                            backgroundColor: 'rgba(234, 179, 8, 0.8)',
+                            borderColor: 'rgba(234, 179, 8, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                };
+                charts.occupancyByHour.update();
+            }
+
+
+            function updateGenericChart(chartName, chartData, title) {
+                const kebabCaseName = chartName.replace(/([A-Z])/g, "-$1").toLowerCase();
+                document.getElementById(`${kebabCaseName}-chart-title`).textContent = title;
+                const chart = charts[chartName];
+                const defaultColors = ['rgba(37, 99, 235, 0.8)', 'rgba(5, 150, 105, 0.8)'];
+                
+                chart.data = {
+                    labels: chartData.labels,
+                    datasets: [{
+                        label: 'Valor',
+                        data: chartData.data,
+                        backgroundColor: chartName === 'tripType' ? defaultColors : 'rgba(37, 99, 235, 0.8)',
+                        borderColor: '#FFFFFF',
+                        borderWidth: 1
+                    }]
+                };
+                chart.update();
+            }
+
+            // --- GEMINI API & CHAT LOGIC ---
+            const chatContainer = document.getElementById('chat-container');
+            const chatToggleBtn = document.getElementById('chat-toggle-btn');
+            const chatCloseBtn = document.getElementById('chat-close-btn');
+            const chatMessages = document.getElementById('chat-messages');
+            const chatInput = document.getElementById('chat-input');
+            const chatSendBtn = document.getElementById('chat-send-btn');
+            const generateInsightsBtn = document.getElementById('generate-insights-btn');
+            const insightsContent = document.getElementById('insights-content');
+            const predictDemandBtn = document.getElementById('predict-demand-btn');
+            const predictionContent = document.getElementById('prediction-content');
+
+            async function callGeminiAPI(prompt, retries = 3, delay = 1000) {
+                const apiKey = ""; 
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+                const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
+
+                try {
+                    const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                    if (!response.ok) {
+                        if (response.status === 429 && retries > 0) {
+                            await new Promise(resolve => setTimeout(resolve, delay));
+                            return callGeminiAPI(prompt, retries - 1, delay * 2);
+                        }
+                        throw new Error(`API request failed with status ${response.status}`);
+                    }
+                    const result = await response.json();
+                    if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
+                        return result.candidates[0].content.parts[0].text;
+                    }
+                    return "No se pudo obtener una respuesta de la IA.";
+                } catch (error) {
+                    console.error("Error calling Gemini API:", error);
+                    if (retries > 0) {
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        return callGeminiAPI(prompt, retries - 1, delay * 2);
+                    }
+                    return "Error al contactar al asistente de IA. Por favor, inténtalo de nuevo más tarde.";
+                }
+            }
+            
+            generateInsightsBtn.addEventListener('click', async () => {
+                insightsContent.innerHTML = '<p>Analizando datos y generando insights... ✨</p>';
+                const filteredData = getFilteredData();
+                if (filteredData.length === 0) {
+                    insightsContent.innerHTML = '<p>No hay datos disponibles para la selección actual.</p>';
+                    return;
+                }
+                const prompt = `Eres un experto en análisis de datos de transporte para "Mayabus". Analiza un resumen de datos para la selección: Año ${filters.year}, Mes ${filters.month}, Día ${filters.day}, Horario ${filters.time}. Genera 3-4 recomendaciones clave y accionables. Sé conciso. Contexto (muestra): ${JSON.stringify(filteredData.slice(0, 10))} Responde como una lista HTML ('<ul>...</ul>').`;
+                const insights = await callGeminiAPI(prompt);
+                insightsContent.innerHTML = insights;
+            });
+
+            predictDemandBtn.addEventListener('click', async () => {
+                predictionContent.innerHTML = '<p>Calculando tendencias y generando pronóstico... ✨</p>';
+                const kpis2025 = aggregateData(getFilteredData('2025', filters.month, filters.day, filters.time));
+                const kpis2024 = aggregateData(getFilteredData('2024', filters.month, filters.day, filters.time));
+                if (kpis2024.pasajeros === 0 || kpis2025.pasajeros === 0) {
+                     predictionContent.innerHTML = '<p>No hay suficientes datos históricos (2024 y 2025) para esta selección para generar un pronóstico.</p>';
+                    return;
+                }
+                const passengerGrowth = formatChange(kpis2025.pasajeros, kpis2024.pasajeros).text;
+                const prompt = `Eres un analista de datos para "Mayabus". Basado en la tendencia de crecimiento de pasajeros de ${passengerGrowth} de 2024 a 2025 para el período (Mes: ${filters.month}, Día: ${filters.day}, Horario: ${filters.time}), genera un pronóstico cualitativo para 2026. Menciona el número estimado de pasajeros y qué implicaciones tiene para la flota. Sé breve y directo. Responde como una lista HTML ('<ul>...</ul>').`;
+                const prediction = await callGeminiAPI(prompt);
+                predictionContent.innerHTML = prediction;
+            });
+
+            chatToggleBtn.addEventListener('click', () => chatContainer.classList.toggle('opacity-0') || chatContainer.classList.toggle('translate-y-8') || chatContainer.classList.toggle('pointer-events-none'));
+            chatCloseBtn.addEventListener('click', () => chatContainer.classList.add('opacity-0', 'translate-y-8', 'pointer-events-none'));
+
+            function addMessage(text, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `flex ${sender === 'user' ? 'justify-end' : 'justify-start'} mb-4`;
+                messageDiv.innerHTML = `<div class="chat-message p-3 rounded-lg ${sender === 'user' ? 'bg-indigo-500 text-white' : 'bg-gray-200 text-gray-800'}">${text}</div>`;
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            async function handleSendMessage() {
+                const text = chatInput.value.trim();
+                if (text) {
+                    addMessage(text, 'user');
+                    chatInput.value = '';
+                    addMessage("Pensando...", 'ai');
+                    const dataContext = JSON.stringify(getFilteredData().slice(0, 20));
+                    const prompt = `
+                        Eres un asistente de IA para el dashboard de Mayabus. Responde a la pregunta del usuario basándote en los datos del periodo seleccionado (Año: ${filters.year}, Mes: ${filters.month}, Día: ${filters.day}, Horario: ${filters.time}). Sé conciso y amigable.
+                        Datos: ${dataContext}
+                        Pregunta: "${text}"
+                    `;
+                    const aiResponse = await callGeminiAPI(prompt);
+                    chatMessages.removeChild(chatMessages.lastChild);
+                    addMessage(aiResponse, 'ai');
+                }
+            }
+
+            chatSendBtn.addEventListener('click', handleSendMessage);
+            chatInput.addEventListener('keypress', (e) => e.key === 'Enter' && handleSendMessage());
+            addMessage("¡Hola! Soy el asistente de datos de Mayabus. ¿En qué puedo ayudarte?", 'ai');
+
+            function setupFilter(filterGroupId, filterKey) {
+                document.getElementById(filterGroupId).addEventListener('click', (e) => {
+                    if (e.target.tagName === 'BUTTON') {
+                        filters[filterKey] = e.target.dataset[filterKey];
+                        updateUI();
+                    }
+                });
+            }
+            setupFilter('year-filter', 'year');
+            setupFilter('month-filter-container', 'month');
+            setupFilter('day-filter', 'day');
+            setupFilter('time-filter', 'time');
+
+            document.getElementById('route-filter').addEventListener('change', updateTicketValidationsChart);
+            document.getElementById('hourly-route-filter').addEventListener('change', updateOccupancyByHourChart);
+            document.getElementById('sort-order-btn').addEventListener('click', (e) => {
+                const btn = e.currentTarget;
+                const newOrder = btn.dataset.order === 'desc' ? 'asc' : 'desc';
+                btn.dataset.order = newOrder;
+                btn.innerHTML = newOrder === 'desc' ? icons.sortDesc : icons.sortAsc;
+                updateTicketValidationsChart();
+            });
+            
+            // File Upload Logic
+            const uploadBtn = document.getElementById('upload-btn');
+            const csvUpload = document.getElementById('csv-upload');
+
+            uploadBtn.addEventListener('click', () => csvUpload.click());
+            csvUpload.addEventListener('change', handleFileSelect, false);
+
+            function handleFileSelect(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const contents = e.target.result;
+                    
+                    const newYear = prompt("Por favor, ingresa el año para este archivo (ej: 2025):");
+                    const newMonth = prompt("Por favor, ingresa el mes para este archivo en minúsculas (ej: agosto):");
+
+                    if (!newYear || !newMonth || isNaN(parseInt(newYear))) {
+                        alert("Año o mes inválido. La carga ha sido cancelada.");
+                        return;
+                    }
+
+                    parseAndIntegrate(contents, newYear, newMonth);
+                };
+                reader.readAsText(file);
+                csvUpload.value = ""; // Reset input
+            }
+
+            function parseAndIntegrate(csvText, year, month) {
+                const lines = csvText.split('\n').slice(1); // Skip header
+                const newTrips = lines.map(line => {
+                    const cols = line.split(',');
+                    if (cols.length < 16) return null; // Basic validation
+                    
+                    const passengers = parseInt(cols[15], 10);
+                    const tickets = parseInt(cols[13], 10);
+                    const occupancy = parseFloat(cols[14].replace('%', ''));
+
+                    // Basic data cleaning
+                    if (isNaN(passengers) || isNaN(tickets) || isNaN(occupancy)) return null;
+
+                    const dateStr = cols[9];
+                    const timeStr = cols[10];
+                    let date, dayOfWeek, hour;
+                    try {
+                        const dateParts = dateStr.split('/');
+                        date = new Date(`${dateParts[2]}-${dateParts[1]}-${dateParts[0]}T${timeStr}`);
+                        dayOfWeek = date.getDay();
+                        hour = parseInt(timeStr.split(':')[0], 10);
+                    } catch(e) { return null; }
+
+                    return {
+                        year: parseInt(year, 10),
+                        month: month.toLowerCase(),
+                        day: (dayOfWeek >= 1 && dayOfWeek <= 5) ? 'L-V' : 'Sábado', // Simplified
+                        time: hour < 12 ? 'Mañana' : (hour < 19 ? 'Tarde' : 'Noche'),
+                        hour: hour,
+                        type: cols[3],
+                        route: cols[0],
+                        passengers,
+                        tickets,
+                        occupancy
+                    };
+                }).filter(Boolean); // Filter out null/invalid rows
+
+                allTrips.push(...newTrips);
+                updateMonthFilter();
+                populateRouteFilters();
+                updateUI();
+                alert(`¡Se han agregado ${newTrips.length} nuevos viajes para ${month} de ${year}!`);
+            }
+
+            function updateMonthFilter() {
+                const monthContainer = document.getElementById('month-filter-container');
+                const months = [...new Set(allTrips.map(t => t.month))];
+                
+                const monthOrder = ['junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+                months.sort((a, b) => monthOrder.indexOf(a) - monthOrder.indexOf(b));
+
+                let buttonsHTML = '';
+                months.forEach(month => {
+                    const monthCapitalized = month.charAt(0).toUpperCase() + month.slice(1);
+                    buttonsHTML += `<button data-month="${month}" class="filter-btn px-3 py-1 rounded-md text-sm">${monthCapitalized}</button>`;
+                });
+                buttonsHTML += `<button data-month="ambos" class="filter-btn px-3 py-1 rounded-md text-sm">Ambos</button>`;
+                
+                monthContainer.innerHTML = buttonsHTML;
+                
+                document.getElementById('month-filter-container').addEventListener('click', (e) => {
+                    if (e.target.tagName === 'BUTTON') {
+                        filters.month = e.target.dataset.month;
+                        updateUI();
+                    }
+                });
+            }
+
+
+            // Initial Load
+            createCharts();
+            populateRouteFilters();
+            updateMonthFilter();
+            document.getElementById('sort-order-btn').innerHTML = icons.sortDesc;
+            // Set default route for hourly chart
+            if (document.getElementById('hourly-route-filter').options.length > 0) {
+                 document.getElementById('hourly-route-filter').value = 'todas';
+            }
+            updateUI();
+        });
+    </script>
+</body>
+</html>
