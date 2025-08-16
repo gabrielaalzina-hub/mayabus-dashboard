@@ -563,6 +563,14 @@
 
                 try {
                     const data = getFilteredData(year, month, filters.day, filters.time);
+                    
+                    if (p.includes('día') && p.includes('hora') && (p.includes('menos ocupación') || p.includes('menor ocupación'))) {
+                        if (data.length === 0) return `No encontré datos para ${month} de ${year}.`;
+                        const sorted = [...data].sort((a, b) => a.occupancy - b.occupancy);
+                        const worstTrip = sorted[0];
+                        return `El viaje con menor ocupación en ${month} de ${year} fue en la ruta <strong>${worstTrip.route}</strong>, el día <strong>${worstTrip.day}</strong> a las <strong>${worstTrip.hour}:00</strong>, con solo un <strong>${worstTrip.occupancy.toFixed(1)}%</strong>.`;
+                    }
+
                     if (p.includes('total de tickets') || p.includes('tickets validados')) {
                         const total = aggregateData(data).tickets;
                         return `En ${month} de ${year}, hubo un total de <strong>${total.toLocaleString('es-MX')}</strong> tickets validados.`;
@@ -588,12 +596,28 @@
                         const sorted = Object.entries(occupancyByRoute).map(([route, d]) => ({ route, occupancy: d.total / d.count })).sort((a,b) => b.occupancy - a.occupancy);
                         return `La ruta con mayor ocupación en ${month} de ${year} fue <strong>${sorted[0].route}</strong> con un promedio de ${sorted[0].occupancy.toFixed(1)}%.`;
                     }
+                    if (p.includes('día') && (p.includes('más tickets') || p.includes('mayor validación'))) {
+                        const byDay = data.reduce((acc, trip) => {
+                            acc[trip.day] = (acc[trip.day] || 0) + trip.tickets;
+                            return acc;
+                        }, {});
+                        const sorted = Object.entries(byDay).sort((a,b) => b[1] - a[1]);
+                        return `El día con más tickets validados fue <strong>${sorted[0][0]}</strong> con ${sorted[0][1].toLocaleString('es-MX')}.`;
+                    }
+                     if (p.includes('día') && (p.includes('menos tickets') || p.includes('menor validación'))) {
+                        const byDay = data.reduce((acc, trip) => {
+                            acc[trip.day] = (acc[trip.day] || 0) + trip.tickets;
+                            return acc;
+                        }, {});
+                        const sorted = Object.entries(byDay).sort((a,b) => a[1] - b[1]);
+                        return `El día con menos tickets validados fue <strong>${sorted[0][0]}</strong> con ${sorted[0][1].toLocaleString('es-MX')}.`;
+                    }
 
                 } catch (e) {
                      return "No pude encontrar datos para esa consulta. Por favor, asegúrate de que los datos estén cargados y la pregunta sea clara.";
                 }
 
-                return "No entendí la pregunta. Puedes preguntarme sobre totales de tickets, pasajeros, o comparaciones entre rutas y años.";
+                return "No entendí la pregunta. Puedes preguntarme sobre totales, comparaciones, o el mejor/peor día o ruta para una métrica.";
             }
 
 
@@ -611,7 +635,7 @@
 
             chatSendBtn.addEventListener('click', handleSendMessage);
             chatInput.addEventListener('keypress', (e) => e.key === 'Enter' && handleSendMessage());
-            addMessage("¡Hola! Soy el asistente de datos de Mayabus. ¿En qué puedo ayudarte?", 'ai');
+            addMessage("¡Hola! Soy el asistente de datos de Mayabus. Puedes preguntarme sobre totales, comparaciones, o los mejores/peores días y rutas. Por ejemplo: '¿Qué día de la semana se validan más tickets?'", 'ai');
 
             function setupFilter(filterGroupId, filterKey) {
                 document.getElementById(filterGroupId).addEventListener('click', (e) => {
