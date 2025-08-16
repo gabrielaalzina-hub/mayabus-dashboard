@@ -76,7 +76,7 @@
                 <div id="year-filter">
                     <button data-year="2024" class="filter-btn px-3 py-1 rounded-md text-sm">2024</button>
                     <button data-year="2025" class="filter-btn px-3 py-1 rounded-md text-sm active">2025</button>
-                    <button data-year="ambos" class="filter-btn px-3 py-1 rounded-md text-sm">Ambos</button>
+                    <button data-year="Todos" class="filter-btn px-3 py-1 rounded-md text-sm">Todos</button>
                 </div>
             </div>
             <div class="flex items-center space-x-4 bg-gray-100 p-2 rounded-lg">
@@ -299,8 +299,8 @@
             
             function getFilteredData(year = filters.year, month = filters.month, day = filters.day, time = filters.time) {
                  return allTrips.filter(trip => {
-                    const yearMatch = year === 'ambos' || trip.year == year;
-                    const monthMatch = month === 'ambos' || trip.month === month;
+                    const yearMatch = year === 'Todos' || trip.year == year;
+                    const monthMatch = month === 'Todos' || trip.month === month;
                     const dayMatch = day === 'Todos' || trip.day === day;
                     const timeMatch = time === 'Todos' || trip.time === time;
                     return yearMatch && monthMatch && dayMatch && timeMatch;
@@ -407,7 +407,7 @@
                         { label: 'Ocupación', data: [kpis2024.ocupacion, kpis2025.ocupacion], type: 'line', borderColor: 'rgba(234, 179, 8, 1)', backgroundColor: 'rgba(234, 179, 8, 0.2)', yAxisID: 'y1', tension: 0.3 }
                     ]
                 };
-                if (filters.year === 'ambos') {
+                if (filters.year === 'Todos') {
                     charts.passengers.data.datasets[1].data = [kpis2024.ocupacion, kpis2025.ocupacion];
                 }
                 charts.passengers.update();
@@ -768,7 +768,7 @@
                     const monthCapitalized = month.charAt(0).toUpperCase() + month.slice(1);
                     buttonsHTML += `<button data-month="${month}" class="filter-btn px-3 py-1 rounded-md text-sm">${monthCapitalized}</button>`;
                 });
-                buttonsHTML += `<button data-month="ambos" class="filter-btn px-3 py-1 rounded-md text-sm">Ambos</button>`;
+                buttonsHTML += `<button data-month="Todos" class="filter-btn px-3 py-1 rounded-md text-sm">Todos</button>`;
                 
                 monthContainer.innerHTML = buttonsHTML;
                 
