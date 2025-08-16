@@ -46,12 +46,6 @@
         .chat-message {
             max-width: 80%;
         }
-        .gemini-btn {
-            transition: all 0.3s ease;
-        }
-        .gemini-btn:hover {
-            box-shadow: 0 0 15px rgba(79, 70, 229, 0.5);
-        }
     </style>
      <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -116,20 +110,10 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                     <span>Cargar</span>
                 </button>
-                <a 
-   href="https://docs.google.com/spreadsheets/d/195PGCbpmC94lEshAM8aeY7Db-9odOj-e/edit?usp=drive_link"
-   target="_blank" rel="noopener"
-   class="flex items-center space-x-2 bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700 transition"
->
-    <!-- Ícono SVG original -->
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-        <polyline points="7 10 12 15 17 10"></polyline>
-        <line x1="12" y1="15" x2="12" y2="3"></line>
-    </svg>
-    <span>Ver formato en Drive</span>
-</a> 
-            </button>
+                <button id="download-btn" class="flex items-center space-x-2 bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    <span>Descargar Reporte</span>
+                </button>
             </div>
         </div>
 
@@ -177,97 +161,21 @@
             <canvas id="occupancyByHourChart"></canvas>
         </section>
 
-        <!-- Gemini Features Section -->
-       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-    <!-- Recomendaciones Section -->
-    <section class="bg-indigo-50 border-l-4 border-indigo-500 p-6 rounded-lg">
-        <div class="flex items-center mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-            </svg>
-            <h2 class="text-xl font-bold text-indigo-800 ml-2">Análisis y Recomendaciones</h2>
-        </div>
-        <div id="insights-content" class="text-indigo-900">
-            <h4 class="font-semibold mb-2">Aquí tienes 3-4 recomendaciones clave y accionables para Mayabus, basadas en el resumen de datos:</h4>
-            <ul class="list-disc pl-5 mb-2">
-                <li>
-                    <b>Optimizar Rutas de Baja Ocupación:</b> Revisa y ajusta la frecuencia o el tipo de unidad en rutas con ocupación consistentemente baja (ej. "El Pocito (Entrada)" L-V Mañana con 11%, "Calle 60" L-V Noche con 27%, o "Altabrisa - Pocito - City Center" Sábado Mañana con 33-40%). Considera unidades más pequeñas o redireccionar recursos a rutas con mayor demanda.
-                </li>
-                <li>
-                    <b>Reforzar Horas Pico en Rutas Clave:</b> La ruta "Américas-Fco. de Montejo-Cd. Caucel" muestra una alta ocupación (67-78%) L-V por la mañana (7h). Evalúa la posibilidad de aumentar la frecuencia o asignar autobuses de mayor capacidad en esos horarios para maximizar ingresos y satisfacer la demanda.
-                </li>
-                <li>
-                    <b>Análisis Detallado de Horarios Nocturnos y Fines de Semana:</b> Observa una tendencia general de menor ocupación en horarios nocturnos (20-21h) y los sábados. Realiza un estudio de demanda específica para estos periodos y ajusta los servicios (ej. rutas express, menor frecuencia) para una operación más eficiente y rentable.
-                </li>
-                <li>
-                    <b>Garantizar Integridad en la Venta de Boletos:</b> Aunque mínimas en esta muestra, las discrepancias entre "passengers" y "tickets" (ej. en "Prolongación-Calle 60" o "Fco. Montejo") deben ser cero. Implementa auditorías aleatorias o mejora los protocolos de venta y verificación para asegurar que cada pasajero genere un boleto, maximizando los ingresos.
-                </li>
-            </ul>
-        </div>
-    </section>
-    <!-- Predicción Section -->
-    <section class="bg-purple-50 border-l-4 border-purple-500 p-6 rounded-lg">
-        <div class="flex items-center mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-            </svg>
-            <h2 class="text-xl font-bold text-purple-800 ml-2">Predicción de Demanda 2026</h2>
-        </div>
-        <div id="prediction-content" class="text-purple-900">
-            <h4 class="font-semibold mb-2">Pronóstico de Demanda 2026</h4>
-            <ul class="list-disc pl-5 mb-2">
-                <li>
-                    <b>Pronóstico de Pasajeros 2026:</b> Basado en la continuidad de la tendencia de crecimiento del +66.7%, se proyecta un aumento masivo de pasajeros. Por ejemplo, si Mayabus tuvo 10,000 pasajeros en 2025, se estima que en 2026 la cifra superaría los 16,600 pasajeros.
-                </li>
-                <li>
-                    <b>Implicaciones para la Flota:</b> Este crecimiento exponencial exigirá una expansión sustancial de la flota. Mayabus necesitará adquirir nuevas unidades de transporte, aumentar significativamente el personal (conductores, mantenimiento) y optimizar la planificación de rutas y frecuencias para gestionar la demanda creciente y evitar la saturación.
-                </li>
-            </ul>
-        </div>
-    </section>
-</div>
-                <div id="insights-content" class="text-indigo-900">
-    <h4 class="font-semibold mb-2">Aquí tienes 3-4 recomendaciones clave y accionables para Mayabus, basadas en el resumen de datos:</h4>
-    <ul class="list-disc pl-5 mb-2">
-        <li>
-            <b>Optimizar Rutas de Baja Ocupación:</b> Revisa y ajusta la frecuencia o el tipo de unidad en rutas con ocupación consistentemente baja (ej. "El Pocito (Entrada)" L-V Mañana con 11%, "Calle 60" L-V Noche con 27%, o "Altabrisa - Pocito - City Center" Sábado Mañana con 33-40%). Considera unidades más pequeñas o redireccionar recursos a rutas con mayor demanda.
-        </li>
-        <li>
-            <b>Reforzar Horas Pico en Rutas Clave:</b> La ruta "Américas-Fco. de Montejo-Cd. Caucel" muestra una alta ocupación (67-78%) L-V por la mañana (7h). Evalúa la posibilidad de aumentar la frecuencia o asignar autobuses de mayor capacidad en esos horarios para maximizar ingresos y satisfacer la demanda.
-        </li>
-        <li>
-            <b>Análisis Detallado de Horarios Nocturnos y Fines de Semana:</b> Observa una tendencia general de menor ocupación en horarios nocturnos (20-21h) y los sábados. Realiza un estudio de demanda específica para estos periodos y ajusta los servicios (ej. rutas express, menor frecuencia) para una operación más eficiente y rentable.
-        </li>
-        <li>
-            <b>Garantizar Integridad en la Venta de Boletos:</b> Aunque mínimas en esta muestra, las discrepancias entre "passengers" y "tickets" (ej. en "Prolongación-Calle 60" o "Fco. Montejo") deben ser cero. Implementa auditorías aleatorias o mejora los protocolos de venta y verificación para asegurar que cada pasajero genere un boleto, maximizando los ingresos.
-        </li>
-    </ul>
-</div>
-
-<div id="prediction-content" class="text-purple-900">
-    <h4 class="font-semibold mb-2">Pronóstico de Demanda 2026</h4>
-    <ul class="list-disc pl-5 mb-2">
-        <li>
-            <b>Pronóstico de Pasajeros 2026:</b> Basado en la continuidad de la tendencia de crecimiento del +66.7%, se proyecta un aumento masivo de pasajeros. Por ejemplo, si Mayabus tuvo 10,000 pasajeros en 2025, se estima que en 2026 la cifra superaría los 16,600 pasajeros.
-        </li>
-        <li>
-            <b>Implicaciones para la Flota:</b> Este crecimiento exponencial exigirá una expansión sustancial de la flota. Mayabus necesitará adquirir nuevas unidades de transporte, aumentar significativamente el personal (conductores, mantenimiento) y optimizar la planificación de rutas y frecuencias para gestionar la demanda creciente y evitar la saturación.
-        </li>
-    </ul>
-</div>
-                    <button id="predict-demand-btn" class="gemini-btn mt-3 sm:mt-0 flex items-center justify-center px-4 py-2 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700">
-                        ✨ Predecir Demanda para 2026
-                    </button>
-                </div>
-                <div id="prediction-content" class="text-purple-900">
-                    <p>Haz clic para generar un pronóstico para 2026 basado en las tendencias.</p>
-                </div>
-            </section>
-        </div>
+        <!-- Recommendations Section -->
+        <section class="bg-indigo-50 border-l-4 border-indigo-500 p-6 rounded-lg">
+            <div class="flex items-center mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-600 mr-3 flex-shrink-0 h-6 w-6"><path d="M15.042 21.672L13.684 16.6s.402-1.238-.696-1.638c-1.1-.4-1.638.696-1.638.696L5.672 21.042c-.3.3-.3.8 0 1.1.3.3.8.3 1.1 0l2.828-2.828l2.122 2.122c.15.15.353.22.565.22s.416-.07.566-.22l2.122-2.122 2.828 2.828c.3.3.8.3 1.1 0 .3-.3.3-.8 0-1.1z"/><path d="m18.153 11.412-8.34-8.34a.5.5 0 0 0-.708 0l-2.12 2.12a.5.5 0 0 0 0 .708l8.34 8.34a.5.5 0 0 0 .708 0l2.12-2.12a.5.5 0 0 0 0-.708z"/></svg>
+                <h2 class="text-xl font-bold text-indigo-800">Recomendaciones Estratégicas</h2>
+            </div>
+            <div id="insights-content" class="text-indigo-900">
+                <ul class="list-disc list-inside space-y-2">
+                    <li><strong>Reforzar Rutas Clave:</strong> La ruta <strong>"Américas-Fco. de Montejo-Cd. Caucel"</strong> es consistentemente la de mayor demanda. Se debe planificar una unidad de refuerzo para las horas pico de la mañana (7-9 AM) para 2026 para evitar la saturación.</li>
+                    <li><strong>Optimizar Rutas de Baja Ocupación:</strong> Rutas como <strong>"El Pocito (Entrada)"</strong> presentan la ocupación más baja. Se recomienda evaluar la viabilidad de fusionar estos viajes con rutas cercanas o utilizar vehículos de menor capacidad para reducir costos operativos.</li>
+                    <li><strong>Planificación de Flota:</strong> El crecimiento general de pasajeros entre 2024 y 2025 justifica la necesidad de adquirir o arrendar entre <strong>2 y 3 unidades adicionales</strong> para el inicio del ciclo 2026.</li>
+                    <li><strong>Ajuste de Frecuencias en Sábado:</strong> Los sábados muestran una demanda concentrada en la mañana. Se podría reducir la frecuencia de las rutas con menor ocupación durante las tardes de los sábados para mejorar la eficiencia.</li>
+                </ul>
+            </div>
+        </section>
     </div>
 
     <!-- Chat Button -->
@@ -278,7 +186,7 @@
     <!-- Chat Modal -->
     <div id="chat-container" class="fixed bottom-24 right-6 w-full max-w-md h-full max-h-[600px] bg-white rounded-lg shadow-2xl flex flex-col transform translate-y-8 opacity-0 pointer-events-none">
         <div class="flex justify-between items-center p-4 bg-indigo-600 text-white rounded-t-lg">
-            <h3 class="font-semibold text-lg">Chatear con Asistente IA</h3>
+            <h3 class="font-semibold text-lg">Chatear con Asistente de Datos</h3>
             <button id="chat-close-btn" class="text-white hover:text-gray-200">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
@@ -626,73 +534,13 @@
                 chart.update();
             }
 
-            // --- GEMINI API & CHAT LOGIC ---
+            // --- Chat Logic (Local Data) ---
             const chatContainer = document.getElementById('chat-container');
             const chatToggleBtn = document.getElementById('chat-toggle-btn');
             const chatCloseBtn = document.getElementById('chat-close-btn');
             const chatMessages = document.getElementById('chat-messages');
             const chatInput = document.getElementById('chat-input');
             const chatSendBtn = document.getElementById('chat-send-btn');
-            const generateInsightsBtn = document.getElementById('generate-insights-btn');
-            const insightsContent = document.getElementById('insights-content');
-            const predictDemandBtn = document.getElementById('predict-demand-btn');
-            const predictionContent = document.getElementById('prediction-content');
-
-            async function callGeminiAPI(prompt, retries = 3, delay = 1000) {
-                const apiKey = ""; 
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-
-                const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
-
-                try {
-                    const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                    if (!response.ok) {
-                        if (response.status === 429 && retries > 0) {
-                            await new Promise(resolve => setTimeout(resolve, delay));
-                            return callGeminiAPI(prompt, retries - 1, delay * 2);
-                        }
-                        throw new Error(`API request failed with status ${response.status}`);
-                    }
-                    const result = await response.json();
-                    if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
-                        return result.candidates[0].content.parts[0].text;
-                    }
-                    return "No se pudo obtener una respuesta de la IA.";
-                } catch (error) {
-                    console.error("Error calling Gemini API:", error);
-                    if (retries > 0) {
-                        await new Promise(resolve => setTimeout(resolve, delay));
-                        return callGeminiAPI(prompt, retries - 1, delay * 2);
-                    }
-                    return "Error al contactar al asistente de IA. Por favor, inténtalo de nuevo más tarde.";
-                }
-            }
-            
-            generateInsightsBtn.addEventListener('click', async () => {
-                insightsContent.innerHTML = '<p>Analizando datos y generando insights... ✨</p>';
-                const filteredData = getFilteredData();
-                if (filteredData.length === 0) {
-                    insightsContent.innerHTML = '<p>No hay datos disponibles para la selección actual.</p>';
-                    return;
-                }
-                const prompt = `Eres un experto en análisis de datos de transporte para "Mayabus". Analiza un resumen de datos para la selección: Año ${filters.year}, Mes ${filters.month}, Día ${filters.day}, Horario ${filters.time}. Genera 3-4 recomendaciones clave y accionables. Sé conciso. Contexto (muestra): ${JSON.stringify(filteredData.slice(0, 10))} Responde como una lista HTML ('<ul>...</ul>').`;
-                const insights = await callGeminiAPI(prompt);
-                insightsContent.innerHTML = insights;
-            });
-
-            predictDemandBtn.addEventListener('click', async () => {
-                predictionContent.innerHTML = '<p>Calculando tendencias y generando pronóstico... ✨</p>';
-                const kpis2025 = aggregateData(getFilteredData('2025', filters.month, filters.day, filters.time));
-                const kpis2024 = aggregateData(getFilteredData('2024', filters.month, filters.day, filters.time));
-                if (kpis2024.pasajeros === 0 || kpis2025.pasajeros === 0) {
-                     predictionContent.innerHTML = '<p>No hay suficientes datos históricos (2024 y 2025) para esta selección para generar un pronóstico.</p>';
-                    return;
-                }
-                const passengerGrowth = formatChange(kpis2025.pasajeros, kpis2024.pasajeros).text;
-                const prompt = `Eres un analista de datos para "Mayabus". Basado en la tendencia de crecimiento de pasajeros de ${passengerGrowth} de 2024 a 2025 para el período (Mes: ${filters.month}, Día: ${filters.day}, Horario: ${filters.time}), genera un pronóstico cualitativo para 2026. Menciona el número estimado de pasajeros y qué implicaciones tiene para la flota. Sé breve y directo. Responde como una lista HTML ('<ul>...</ul>').`;
-                const prediction = await callGeminiAPI(prompt);
-                predictionContent.innerHTML = prediction;
-            });
 
             chatToggleBtn.addEventListener('click', () => chatContainer.classList.toggle('opacity-0') || chatContainer.classList.toggle('translate-y-8') || chatContainer.classList.toggle('pointer-events-none'));
             chatCloseBtn.addEventListener('click', () => chatContainer.classList.add('opacity-0', 'translate-y-8', 'pointer-events-none'));
@@ -705,21 +553,59 @@
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
 
-            async function handleSendMessage() {
+            function getLocalAIResponse(prompt) {
+                const p = prompt.toLowerCase();
+                const yearMatch = p.match(/2024|2025/);
+                const monthMatch = p.match(/junio|julio|agosto|septiembre|octubre|noviembre|diciembre/);
+                
+                const year = yearMatch ? yearMatch[0] : filters.year;
+                const month = monthMatch ? monthMatch[0] : filters.month;
+
+                try {
+                    const data = getFilteredData(year, month, filters.day, filters.time);
+                    if (p.includes('total de tickets') || p.includes('tickets validados')) {
+                        const total = aggregateData(data).tickets;
+                        return `En ${month} de ${year}, hubo un total de <strong>${total.toLocaleString('es-MX')}</strong> tickets validados.`;
+                    }
+                    if (p.includes('total de pasajeros')) {
+                        const total = aggregateData(data).pasajeros;
+                        return `El total de pasajeros para ${month} de ${year} fue de <strong>${total.toLocaleString('es-MX')}</strong>.`;
+                    }
+                     if (p.includes('comparar pasajeros')) {
+                        const p2025 = aggregateData(getFilteredData('2025', month, filters.day, filters.time)).pasajeros;
+                        const p2024 = aggregateData(getFilteredData('2024', month, filters.day, filters.time)).pasajeros;
+                        const diff = p2025 - p2024;
+                        const percentChange = ((diff / p2024) * 100).toFixed(1);
+                        return `En ${month}, hubo <strong>${p2025.toLocaleString('es-MX')}</strong> pasajeros en 2025 y <strong>${p2024.toLocaleString('es-MX')}</strong> en 2024. Es un aumento de ${diff.toLocaleString('es-MX')} pasajeros (${percentChange}%).`;
+                    }
+                    if (p.includes('ruta con más ocupación') || p.includes('ruta más llena')) {
+                        const occupancyByRoute = data.reduce((acc, trip) => {
+                            if (!acc[trip.route]) { acc[trip.route] = { total: 0, count: 0 }; }
+                            acc[trip.route].total += trip.occupancy;
+                            acc[trip.route].count += 1;
+                            return acc;
+                        }, {});
+                        const sorted = Object.entries(occupancyByRoute).map(([route, d]) => ({ route, occupancy: d.total / d.count })).sort((a,b) => b.occupancy - a.occupancy);
+                        return `La ruta con mayor ocupación en ${month} de ${year} fue <strong>${sorted[0].route}</strong> con un promedio de ${sorted[0].occupancy.toFixed(1)}%.`;
+                    }
+
+                } catch (e) {
+                     return "No pude encontrar datos para esa consulta. Por favor, asegúrate de que los datos estén cargados y la pregunta sea clara.";
+                }
+
+                return "No entendí la pregunta. Puedes preguntarme sobre totales de tickets, pasajeros, o comparaciones entre rutas y años.";
+            }
+
+
+            function handleSendMessage() {
                 const text = chatInput.value.trim();
                 if (text) {
                     addMessage(text, 'user');
                     chatInput.value = '';
-                    addMessage("Pensando...", 'ai');
-                    const dataContext = JSON.stringify(getFilteredData().slice(0, 20));
-                    const prompt = `
-                        Eres un asistente de IA para el dashboard de Mayabus. Responde a la pregunta del usuario basándote en los datos del periodo seleccionado (Año: ${filters.year}, Mes: ${filters.month}, Día: ${filters.day}, Horario: ${filters.time}). Sé conciso y amigable.
-                        Datos: ${dataContext}
-                        Pregunta: "${text}"
-                    `;
-                    const aiResponse = await callGeminiAPI(prompt);
-                    chatMessages.removeChild(chatMessages.lastChild);
-                    addMessage(aiResponse, 'ai');
+                    setTimeout(() => {
+                        const aiResponse = getLocalAIResponse(text);
+                        addMessage(aiResponse, 'ai');
+                    }, 500);
                 }
             }
 
@@ -750,12 +636,59 @@
                 updateTicketValidationsChart();
             });
             
-            // File Upload Logic
+            // File Upload & Download Logic
             const uploadBtn = document.getElementById('upload-btn');
             const csvUpload = document.getElementById('csv-upload');
+            const downloadBtn = document.getElementById('download-btn');
+
 
             uploadBtn.addEventListener('click', () => csvUpload.click());
             csvUpload.addEventListener('change', handleFileSelect, false);
+            downloadBtn.addEventListener('click', downloadReport);
+
+            function downloadReport() {
+                const filteredData = getFilteredData();
+                if (filteredData.length === 0) {
+                    alert('No hay datos para descargar con los filtros actuales.');
+                    return;
+                }
+
+                const headers = ['Ruta','Id de ruta','Descripción de ruta','Etiquetas','Categoría de Vehículo','Identificador conductor','Nombre de conductor','Calendarizada','Sincronizado Offline','Duración','Fecha inicio','Hora de inicio','Hora de término','Activo','Tickets utilizados','% Ocupación','Número de pasajeros'];
+                const csvRows = [headers.join(',')];
+
+                filteredData.forEach(trip => {
+                    const row = [
+                        `"${trip.route.replace(/"/g, '""')}"`, // Ruta
+                        '', // Id de ruta
+                        '', // Descripción de ruta
+                        trip.type, // Etiquetas
+                        '', // Categoría de Vehículo
+                        '', // Identificador conductor
+                        '', // Nombre de conductor
+                        '', // Calendarizada
+                        '', // Sincronizado Offline
+                        '', // Duración
+                        '', // Fecha inicio
+                        '', // Hora de inicio
+                        '', // Hora de término
+                        '', // Activo
+                        trip.tickets, // Tickets utilizados
+                        `${trip.occupancy}%`, // % Ocupación
+                        trip.passengers // Número de pasajeros
+                    ];
+                    csvRows.push(row.join(','));
+                });
+
+                const csvContent = "data:text/csv;charset=utf-8," + csvRows.join('\n');
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", `reporte_mayabus_${new Date().toISOString().slice(0,10)}.csv`);
+                document.body.appendChild(link); 
+                link.click();
+                document.body.removeChild(link);
+            }
+
 
             function handleFileSelect(event) {
                 const file = event.target.files[0];
@@ -862,7 +795,3 @@
     </script>
 </body>
 </html>
-
-
-
-
