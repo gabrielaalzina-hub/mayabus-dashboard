@@ -41,6 +41,15 @@
             transition: opacity 0.5s, transform 0.5s;
             transform: translateY(-20px);
         }
+        .cohort-table td, .cohort-table th {
+            text-align: center;
+            padding: 0.75rem;
+            font-size: 0.875rem;
+        }
+        .cohort-table .cohort-label {
+            text-align: left;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body class="text-slate-800">
@@ -51,8 +60,8 @@
     <!-- Header -->
     <header class="bg-white shadow-sm">
         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-            <h1 class="text-3xl font-bold leading-tight text-slate-900">Dashboard de Operaciones de Transporte</h1>
-            <p class="mt-1 text-sm text-slate-500">Análisis de Comportamiento de Alumnos | Periodo: Abril 2024</p>
+            <h1 class="text-3xl font-bold leading-tight text-slate-900">Dashboard Estratégico y de Operaciones</h1>
+            <p class="mt-1 text-sm text-slate-500">Análisis de Comportamiento y Retención de Usuarios</p>
         </div>
     </header>
 
@@ -71,13 +80,11 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                                 Archivo Tickets
                             </button>
-                             
                             <input type="file" id="input-servicios" class="hidden" accept=".csv">
                             <button id="upload-servicios" class="file-upload-btn">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                                 Archivo Servicios
                             </button>
-                             
                             <input type="file" id="input-validaciones" class="hidden" accept=".csv">
                             <button id="upload-validaciones" class="file-upload-btn">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
@@ -87,28 +94,30 @@
                     </div>
                     <!-- Filtros -->
                     <div>
-                        <h3 class="text-lg font-semibold text-slate-800 mb-3">Filtrar por Fecha y Horario</h3>
-                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        <h3 class="text-lg font-semibold text-slate-800 mb-3">Filtros Globales</h3>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
                             <select id="filtro-ano" class="w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                                <option value="todos">Todos</option>
-                                <option value="2024">2024</option>
-                                <option value="2023">2023</option>
+                                <option value="todos">Año: Todos</option>
+                                <option value="2024" selected>Año: 2024</option>
+                                <option value="2023">Año: 2023</option>
                             </select>
                             <select id="filtro-mes" class="w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                                <option value="todos">Todos</option>
+                                <option value="todos">Mes: Todos</option>
                                 <option value="4">Abril</option>
-                                <option value="5">Mayo</option>
-                                <option value="6">Junio</option>
                             </select>
                             <select id="filtro-dia" class="w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                                <option value="todos">Todos</option>
-                                <!-- Días se podrían poblar dinámicamente -->
+                                <option value="todos">Día: Todos</option>
                             </select>
                             <select id="filtro-horario" class="w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                                <option value="todos">Todos</option>
-                                <option value="manana">Mañana (6-12)</option>
-                                <option value="tarde">Tarde (12-18)</option>
-                                <option value="noche">Noche (18-23)</option>
+                                <option value="todos">Turno: Todos</option>
+                                <option value="manana">Mañana</option>
+                                <option value="tarde">Tarde</option>
+                                <option value="noche">Noche</option>
+                            </select>
+                            <select id="filtro-tipo-usuario" class="w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                                <option value="todos">Usuario: Todos</option>
+                                <option value="estudiante">Estudiante</option>
+                                <option value="colaborador">Colaborador</option>
                             </select>
                         </div>
                     </div>
@@ -126,12 +135,21 @@
                 </div>
             </section>
 
-            <!-- Gráficos de Análisis de Demanda -->
+            <!-- Análisis de Demanda y Uso -->
             <section id="analisis-demanda" class="mt-12">
                 <h2 class="text-xl font-semibold text-slate-700 mb-4">Análisis de Demanda y Uso</h2>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <div class="bg-white rounded-xl shadow p-6"><h3 class="font-semibold text-slate-800">Viajes por Día del Mes</h3><p class="text-sm text-slate-500 mb-4">Patrones de uso semanales.</p><div class="chart-container"><canvas id="viajesPorDiaChart"></canvas></div></div>
                     <div class="bg-white rounded-xl shadow p-6"><h3 class="font-semibold text-slate-800">Horas de Mayor Afluencia</h3><p class="text-sm text-slate-500 mb-4">Identifica las horas pico.</p><div class="chart-container"><canvas id="viajesPorHoraChart"></canvas></div></div>
+                </div>
+            </section>
+            
+            <!-- Análisis de Retención de Usuarios (Cohorts) -->
+            <section id="analisis-retencion" class="mt-12">
+                <div class="bg-white rounded-xl shadow p-6">
+                    <h2 class="text-xl font-semibold text-slate-800">Análisis de Lealtad y Retención de Usuarios</h2>
+                    <p class="text-sm text-slate-500 mb-4">Mide cuántos usuarios nuevos de cada mes continúan usando el servicio en los meses siguientes.</p>
+                    <div id="cohort-table-container" class="overflow-x-auto"></div>
                 </div>
             </section>
 
@@ -156,18 +174,17 @@
                             </ul>
                         </div>
                         <div>
-                            <h3 class="text-lg font-semibold text-slate-700 mb-2">2. Entendimiento del Comportamiento de Compra</h3>
+                            <h3 class="text-lg font-semibold text-slate-700 mb-2">2. Entendimiento del Comportamiento de Compra y Retención</h3>
                             <ul class="list-disc list-inside space-y-1">
-                                <li><strong>Fidelización del Usuario Recurrente:</strong> El "Pase Semanal" domina las ventas (casi 70% de los tickets). Esto indica una base de usuarios leal. Se recomienda lanzar un programa de lealtad (ej. "Compra 4 pases semanales y obtén un descuento en el 5to") para retener a este segmento.</li>
-                                <li><strong>Potenciar al Usuario Ocasional:</strong> El "Pase Redondo" representa un 28% de los tickets. Para este grupo, se pueden crear promociones puntuales vía la app o correo electrónico (ej. "Viaja 3 veces esta semana y el 4to viaje redondo es a mitad de precio") para incentivar un mayor uso.</li>
-                                <li><strong>Explorar Nuevos Productos:</strong> Considerar la viabilidad de un "Pase Mensual" con un ligero descuento. Esto simplificaría la compra para los usuarios más frecuentes, aseguraría un flujo de ingresos más predecible al inicio del mes y aumentaría la barrera de salida hacia otros medios de transporte.</li>
+                                <li><strong>Fidelización del Usuario Recurrente:</strong> El "Pase Semanal" domina las ventas (casi 70% de los tickets). Esto indica una base de usuarios leal. El análisis de cohortes confirma una buena retención inicial (~78%), pero muestra una ligera caída en el tercer mes. Se recomienda lanzar un programa de lealtad para fortalecer la retención a largo plazo.</li>
+                                <li><strong>Explorar Nuevos Productos:</strong> Considerar la viabilidad de un "Pase Mensual". Esto simplificaría la compra para los usuarios más frecuentes, aseguraría un flujo de ingresos más predecible y podría mejorar las tasas de retención del Mes 2 en adelante.</li>
                             </ul>
                         </div>
                          <div>
                             <h3 class="text-lg font-semibold text-slate-700 mb-2">3. Estrategia y Crecimiento</h3>
                             <ul class="list-disc list-inside space-y-1">
-                                <li><strong>Encuestas de Satisfacción Geo-localizadas:</strong> Utilizar la app para lanzar encuestas breves a los usuarios justo al terminar su viaje en rutas específicas. Esto puede proporcionar insights valiosos sobre la calidad del servicio, puntualidad y comodidad que los números brutos no muestran.</li>
-                                <li><strong>Análisis de Demanda Insatisfecha:</strong> Cruzar los datos de horarios y rutas con los horarios de clases y actividades extracurriculares. Podríamos estar perdiendo pasajeros por no tener una salida a las 10:00 PM, por ejemplo. Analizar esta "demanda fantasma" puede abrir nuevas oportunidades de servicio.</li>
+                                <li><strong>Encuestas de Satisfacción Geo-localizadas:</strong> Utilizar la app para lanzar encuestas breves a los usuarios justo al terminar su viaje en rutas específicas, especialmente en cohortes que muestran una caída en la retención.</li>
+                                <li><strong>Análisis de Demanda Insatisfecha:</strong> Cruzar los datos de horarios y rutas con los horarios de clases. Podríamos estar perdiendo pasajeros por no tener una salida a las 10:00 PM. Analizar esta "demanda fantasma" puede abrir nuevas oportunidades de servicio.</li>
                             </ul>
                         </div>
                     </div>
@@ -184,12 +201,20 @@
     </footer>
 
     <script>
-        // --- INICIO DE DATOS AGREGADOS ---
+        // --- INICIO DE DATOS SIMULADOS ---
         const viajesPorDiaData = { labels: ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"], values: [551, 608, 621, 620, 482, 10, 1, 574, 663, 624, 642, 513, 11, 0, 563, 638, 597, 631, 480, 10, 1, 570, 629, 584, 602, 473, 11, 0, 490, 510] };
         const viajesPorHoraData = { labels: ["06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"], values: [2284, 1101, 384, 237, 241, 196, 429, 786, 1278, 831, 541, 497, 602, 731, 882, 609, 250] };
         const topRutasData = [ { ruta: "PROLONGACIÓN MONTEJO (LUN-VIE)", viajes: 3116, ocupacion: "53.5%" }, { ruta: "CALLE 60 (LUN-VIE)", viajes: 2751, ocupacion: "46.8%" }, { ruta: "ORIENTE (LUN-VIE)", viajes: 2058, ocupacion: "53.8%" }, { ruta: "NORTE (LUN-VIE)", viajes: 1121, ocupacion: "37.6%" }, { ruta: "EL POCITO (LUN-VIE)", viajes: 874, ocupacion: "32.8%" }, { ruta: "ALIANZA DE CAMIONEROS (LUN-VIE)", viajes: 738, ocupacion: "48.1%" } ];
         const tipoPaseData = { labels: ["Pase Semanal (10)", "Pases Redondos (2)", "Otros"], values: [12290, 5020, 321] };
-        // --- FIN DE DATOS AGREGADOS ---
+        const cohortData = [
+            { cohort: 'Enero 2024', newUsers: 850, retention: [100, 75, 71, 65, 62, 58] },
+            { cohort: 'Febrero 2024', newUsers: 920, retention: [100, 80, 73, 68, 66] },
+            { cohort: 'Marzo 2024', newUsers: 780, retention: [100, 72, 69, 64] },
+            { cohort: 'Abril 2024', newUsers: 946, retention: [100, 78, 75] },
+            { cohort: 'Mayo 2024', newUsers: 890, retention: [100, 81] },
+            { cohort: 'Junio 2024', newUsers: 910, retention: [100] },
+        ];
+        // --- FIN DE DATOS SIMULADOS ---
 
         document.addEventListener('DOMContentLoaded', () => {
 
@@ -197,16 +222,13 @@
             const setupFileUpload = (buttonId, inputId, fileType) => {
                 const button = document.getElementById(buttonId);
                 const input = document.getElementById(inputId);
-
                 button.addEventListener('click', () => input.click());
                 input.addEventListener('change', (event) => {
                     const file = event.target.files[0];
                     if (file) {
                         console.log(`Archivo de ${fileType} seleccionado:`, file.name);
                         showNotification(`"${file.name}" cargado con éxito.`);
-                        // En una aplicación real, aquí se llamaría a la función para procesar el CSV.
-                        // e.g., processCSV(file, fileType);
-                        input.value = ''; // Permite volver a cargar el mismo archivo
+                        input.value = ''; 
                     }
                 });
             };
@@ -223,7 +245,7 @@
                 setTimeout(() => {
                     notification.style.transform = 'translateY(-20px)';
                     notification.classList.add('opacity-0');
-                }, 4000); // La notificación se oculta después de 4 segundos
+                }, 4000);
             };
 
             // --- LÓGICA DE FILTROS ---
@@ -231,27 +253,72 @@
             document.getElementById('filtro-mes').addEventListener('change', (e) => console.log(`Filtro Mes cambiado a: ${e.target.value}`));
             document.getElementById('filtro-dia').addEventListener('change', (e) => console.log(`Filtro Día cambiado a: ${e.target.value}`));
             document.getElementById('filtro-horario').addEventListener('change', (e) => console.log(`Filtro Horario cambiado a: ${e.target.value}`));
+            document.getElementById('filtro-tipo-usuario').addEventListener('change', (e) => console.log(`Filtro Tipo de Usuario cambiado a: ${e.target.value}`));
 
             // --- LÓGICA DE GRÁFICOS ---
-            const chartOptions = { maintainAspectRatio: false, responsive: true, scales: { y: { beginAtZero: true, grid: { color: '#e2e8f0' }, ticks: { color: '#64748b' } }, x: { grid: { display: false }, ticks: { color: '#64748b' } } }, plugins: { legend: { display: false } } };
+            const renderCharts = () => {
+                const chartOptions = { maintainAspectRatio: false, responsive: true, scales: { y: { beginAtZero: true, grid: { color: '#e2e8f0' }, ticks: { color: '#64748b' } }, x: { grid: { display: false }, ticks: { color: '#64748b' } } }, plugins: { legend: { display: false } } };
 
-            const ctxDia = document.getElementById('viajesPorDiaChart').getContext('2d');
-            new Chart(ctxDia, { type: 'line', data: { labels: viajesPorDiaData.labels, datasets: [{ label: 'Número de Viajes', data: viajesPorDiaData.values, backgroundColor: 'rgba(59, 130, 246, 0.1)', borderColor: 'rgba(59, 130, 246, 1)', borderWidth: 2, fill: true, tension: 0.4 }] }, options: chartOptions });
-            const ctxHora = document.getElementById('viajesPorHoraChart').getContext('2d');
-            new Chart(ctxHora, { type: 'bar', data: { labels: viajesPorHoraData.labels.map(h => `${h}:00`), datasets: [{ label: 'Número de Viajes', data: viajesPorHoraData.values, backgroundColor: 'rgba(107, 33, 168, 0.8)', borderColor: 'rgba(107, 33, 168, 1)', borderWidth: 1 }] }, options: chartOptions });
-            const ctxPase = document.getElementById('tipoPaseChart').getContext('2d');
-            new Chart(ctxPase, { type: 'doughnut', data: { labels: tipoPaseData.labels, datasets: [{ label: 'Distribución de Tickets Vendidos', data: tipoPaseData.values, backgroundColor: ['rgba(2, 132, 199, 0.9)', 'rgba(219, 39, 119, 0.9)', 'rgba(245, 158, 11, 0.9)'], borderColor: '#ffffff', borderWidth: 3 }] }, options: { maintainAspectRatio: false, responsive: true, plugins: { legend: { position: 'bottom', labels: { color: '#64748b', padding: 20 } } } } });
+                new Chart(document.getElementById('viajesPorDiaChart').getContext('2d'), { type: 'line', data: { labels: viajesPorDiaData.labels, datasets: [{ label: 'Número de Viajes', data: viajesPorDiaData.values, backgroundColor: 'rgba(59, 130, 246, 0.1)', borderColor: 'rgba(59, 130, 246, 1)', borderWidth: 2, fill: true, tension: 0.4 }] }, options: chartOptions });
+                new Chart(document.getElementById('viajesPorHoraChart').getContext('2d'), { type: 'bar', data: { labels: viajesPorHoraData.labels.map(h => `${h}:00`), datasets: [{ label: 'Número de Viajes', data: viajesPorHoraData.values, backgroundColor: 'rgba(107, 33, 168, 0.8)', borderColor: 'rgba(107, 33, 168, 1)', borderWidth: 1 }] }, options: chartOptions });
+                new Chart(document.getElementById('tipoPaseChart').getContext('2d'), { type: 'doughnut', data: { labels: tipoPaseData.labels, datasets: [{ label: 'Distribución de Tickets Vendidos', data: tipoPaseData.values, backgroundColor: ['rgba(2, 132, 199, 0.9)', 'rgba(219, 39, 119, 0.9)', 'rgba(245, 158, 11, 0.9)'], borderColor: '#ffffff', borderWidth: 3 }] }, options: { maintainAspectRatio: false, responsive: true, plugins: { legend: { position: 'bottom', labels: { color: '#64748b', padding: 20 } } } } });
 
-            const rutasTableBody = document.getElementById('top-rutas-table');
-            topRutasData.forEach(ruta => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="px-6 py-4 whitespace-nowrap"><div class="text-sm font-medium text-slate-900">${ruta.ruta.replace(' (LUN-VIE)', '')}</div></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">${ruta.viajes.toLocaleString('es-MX')}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm"><span class="font-semibold ${parseFloat(ruta.ocupacion) > 50 ? 'text-emerald-600' : 'text-amber-600'}">${ruta.ocupacion}</span></td>
-                `;
-                rutasTableBody.appendChild(tr);
-            });
+                const rutasTableBody = document.getElementById('top-rutas-table');
+                rutasTableBody.innerHTML = ''; // Clear existing rows
+                topRutasData.forEach(ruta => {
+                    rutasTableBody.innerHTML += `<tr>
+                        <td class="px-6 py-4 whitespace-nowrap"><div class="text-sm font-medium text-slate-900">${ruta.ruta.replace(' (LUN-VIE)', '')}</div></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">${ruta.viajes.toLocaleString('es-MX')}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm"><span class="font-semibold ${parseFloat(ruta.ocupacion) > 50 ? 'text-emerald-600' : 'text-amber-600'}">${ruta.ocupacion}</span></td>
+                    </tr>`;
+                });
+            };
+
+            const renderCohortChart = (data) => {
+                const container = document.getElementById('cohort-table-container');
+                container.innerHTML = '';
+                
+                const table = document.createElement('table');
+                table.className = 'min-w-full divide-y divide-slate-200 cohort-table';
+
+                const maxMonths = Math.max(...data.map(d => d.retention.length));
+
+                // Header
+                let theadHTML = `<thead class="bg-slate-50"><tr>
+                    <th class="cohort-label px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Mes Adquisición</th>
+                    <th class="px-6 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider">Nuevos Usuarios</th>`;
+                for (let i = 0; i < maxMonths; i++) {
+                    theadHTML += `<th class="px-6 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider">Mes ${i}</th>`;
+                }
+                theadHTML += '</tr></thead>';
+                
+                // Body
+                let tbodyHTML = '<tbody class="bg-white divide-y divide-slate-200">';
+                data.forEach(cohort => {
+                    tbodyHTML += `<tr>
+                        <td class="cohort-label px-6 py-4 whitespace-nowrap text-sm text-slate-900">${cohort.cohort}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">${cohort.newUsers.toLocaleString('es-MX')}</td>`;
+                    
+                    cohort.retention.forEach(percentage => {
+                        const opacity = percentage / 100;
+                        const bgColor = `rgba(34, 197, 94, ${opacity})`; // Green with variable opacity
+                        tbodyHTML += `<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-800" style="background-color: ${bgColor}; color: ${opacity > 0.6 ? 'white' : 'inherit'}">${percentage}%</td>`;
+                    });
+
+                    // Fill empty cells
+                    for (let i = cohort.retention.length; i < maxMonths; i++) {
+                         tbodyHTML += `<td class="bg-slate-50"></td>`;
+                    }
+                    tbodyHTML += '</tr>';
+                });
+                tbodyHTML += '</tbody>';
+                
+                table.innerHTML = theadHTML + tbodyHTML;
+                container.appendChild(table);
+            };
+            
+            renderCharts();
+            renderCohortChart(cohortData);
         });
     </script>
 </body>
