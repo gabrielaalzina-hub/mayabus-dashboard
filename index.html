@@ -37,9 +37,16 @@
             background-color: #f1f5f9;
             border-color: #cbd5e1;
         }
+        #notification {
+            transition: opacity 0.5s, transform 0.5s;
+            transform: translateY(-20px);
+        }
     </style>
 </head>
 <body class="text-slate-800">
+
+    <!-- Notification Element -->
+    <div id="notification" class="fixed top-5 right-5 bg-emerald-500 text-white py-3 px-5 rounded-lg shadow-lg opacity-0 z-50"></div>
 
     <!-- Header -->
     <header class="bg-white shadow-sm">
@@ -59,15 +66,20 @@
                     <div>
                         <h3 class="text-lg font-semibold text-slate-800 mb-3">Actualizar Datos</h3>
                         <div class="flex flex-wrap gap-4">
+                            <input type="file" id="input-tickets" class="hidden" accept=".csv">
                             <button id="upload-tickets" class="file-upload-btn">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                                 Archivo Tickets
                             </button>
-                             <button id="upload-servicios" class="file-upload-btn">
+                             
+                            <input type="file" id="input-servicios" class="hidden" accept=".csv">
+                            <button id="upload-servicios" class="file-upload-btn">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                                 Archivo Servicios
                             </button>
-                             <button id="upload-validaciones" class="file-upload-btn">
+                             
+                            <input type="file" id="input-validaciones" class="hidden" accept=".csv">
+                            <button id="upload-validaciones" class="file-upload-btn">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                                 Archivo Validaciones
                             </button>
@@ -180,11 +192,41 @@
         // --- FIN DE DATOS AGREGADOS ---
 
         document.addEventListener('DOMContentLoaded', () => {
-            // --- LÓGICA DE CONTROLES ---
-            document.getElementById('upload-tickets').addEventListener('click', () => console.log('Iniciar carga de archivo Tickets...'));
-            document.getElementById('upload-servicios').addEventListener('click', () => console.log('Iniciar carga de archivo Servicios...'));
-            document.getElementById('upload-validaciones').addEventListener('click', () => console.log('Iniciar carga de archivo Validaciones...'));
+
+            // --- LÓGICA DE CARGA DE ARCHIVOS ---
+            const setupFileUpload = (buttonId, inputId, fileType) => {
+                const button = document.getElementById(buttonId);
+                const input = document.getElementById(inputId);
+
+                button.addEventListener('click', () => input.click());
+                input.addEventListener('change', (event) => {
+                    const file = event.target.files[0];
+                    if (file) {
+                        console.log(`Archivo de ${fileType} seleccionado:`, file.name);
+                        showNotification(`"${file.name}" cargado con éxito.`);
+                        // En una aplicación real, aquí se llamaría a la función para procesar el CSV.
+                        // e.g., processCSV(file, fileType);
+                        input.value = ''; // Permite volver a cargar el mismo archivo
+                    }
+                });
+            };
             
+            setupFileUpload('upload-tickets', 'input-tickets', 'Tickets');
+            setupFileUpload('upload-servicios', 'input-servicios', 'Servicios');
+            setupFileUpload('upload-validaciones', 'input-validaciones', 'Validaciones');
+
+            const showNotification = (message) => {
+                const notification = document.getElementById('notification');
+                notification.textContent = message;
+                notification.style.transform = 'translateY(0)';
+                notification.classList.remove('opacity-0');
+                setTimeout(() => {
+                    notification.style.transform = 'translateY(-20px)';
+                    notification.classList.add('opacity-0');
+                }, 4000); // La notificación se oculta después de 4 segundos
+            };
+
+            // --- LÓGICA DE FILTROS ---
             document.getElementById('filtro-ano').addEventListener('change', (e) => console.log(`Filtro Año cambiado a: ${e.target.value}`));
             document.getElementById('filtro-mes').addEventListener('change', (e) => console.log(`Filtro Mes cambiado a: ${e.target.value}`));
             document.getElementById('filtro-dia').addEventListener('change', (e) => console.log(`Filtro Día cambiado a: ${e.target.value}`));
