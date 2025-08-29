@@ -132,7 +132,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <div class="bg-white rounded-xl shadow p-6"><p class="text-sm font-medium text-slate-500">Total de Viajes Realizados</p><p class="text-4xl font-bold text-blue-600" id="total-viajes">0</p><p class="text-xs text-slate-400 mt-2">Número total de validaciones en el mes.</p></div>
                     <div class="bg-white rounded-xl shadow p-6"><p class="text-sm font-medium text-slate-500">Pasajeros Únicos</p><p class="text-4xl font-bold text-indigo-600" id="pasajeros-unicos">0</p><p class="text-xs text-slate-400 mt-2">Estudiantes y colaboradores distintos.</p></div>
-                    <div class="bg-white rounded-xl shadow p-6"><p class="text-sm font-medium text-slate-500">Ocupación Promedio</p><p class="text-4xl font-bold text-emerald-600" id="ocupacion-promedio">0%</p><p class="text-xs text-slate-400 mt-2">Eficiencia en el uso de la capacidad.</p></div>
+                    <div class="bg-white rounded-xl shadow p-6"><p class="text-sm font-medium text-slate-500">Ingresos del Mes</p><p class="text-4xl font-bold text-emerald-600" id="ingresos-mes">$0</p><p class="text-xs text-slate-400 mt-2">Suma total de la venta de pases.</p></div>
                     <div class="bg-white rounded-xl shadow p-6"><p class="text-sm font-medium text-slate-500">Ruta Más Popular</p><p class="text-2xl font-bold text-amber-600" id="ruta-popular">-</p><p class="text-xs text-slate-400 mt-2">Con 0 viajes en el mes.</p></div>
                 </div>
             </section>
@@ -193,14 +193,7 @@
             viajesPorHora: { labels: [], values: [] },
             topRutas: [],
             tipoPase: { labels: [], values: [] },
-            cohort: [
-                { cohort: 'Enero 2024', newUsers: 850, retention: [100, 75, 71, 65, 62, 58] },
-                { cohort: 'Febrero 2024', newUsers: 920, retention: [100, 80, 73, 68, 66] },
-                { cohort: 'Marzo 2024', newUsers: 780, retention: [100, 72, 69, 64] },
-                { cohort: 'Abril 2024', newUsers: 946, retention: [100, 78, 75] },
-                { cohort: 'Mayo 2024', newUsers: 890, retention: [100, 81] },
-                { cohort: 'Junio 2024', newUsers: 910, retention: [100] },
-            ]
+            cohort: []
         };
         // --- FIN DE DATOS SIMULADOS ---
 
@@ -311,11 +304,39 @@
             updateDashboard();
         }
 
-        // Placeholder para procesar otros archivos
+        // AHORA CON LÓGICA PARA PROCESAR TICKETS
         function processTicketsData(data) {
-            showNotification("La lógica para procesar 'Tickets' aún no ha sido implementada.", "warning");
-            console.log("Datos de Tickets:", data);
+            if (!data || data.length === 0) {
+                showNotification("El archivo de tickets está vacío o en formato incorrecto.", "error");
+                return;
+            }
+
+            // 1. Procesar Comportamiento de Compra (Tipo de Pase)
+            const tipoPaseCounts = {};
+            let totalIngresos = 0;
+
+            data.forEach(row => {
+                const pase = row.tipo_pase || 'Otro';
+                tipoPaseCounts[pase] = (tipoPaseCounts[pase] || 0) + 1;
+                
+                // Sumar ingresos, asegurándose de que el monto es un número
+                const monto = parseFloat(row.monto);
+                if (!isNaN(monto)) {
+                    totalIngresos += monto;
+                }
+            });
+
+            dashboardData.tipoPase.labels = Object.keys(tipoPaseCounts);
+            dashboardData.tipoPase.values = Object.values(tipoPaseCounts);
+
+            // 2. Actualizar el nuevo KPI de Ingresos
+            const formatter = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' });
+            document.getElementById('ingresos-mes').textContent = formatter.format(totalIngresos);
+            
+            // 3. Actualizar el dashboard para reflejar los cambios en el gráfico
+            updateDashboard();
         }
+
         function processServiciosData(data) {
             showNotification("La lógica para procesar 'Servicios' aún no ha sido implementada.", "warning");
             console.log("Datos de Servicios:", data);
@@ -372,6 +393,12 @@
         function renderCohortChart(data) {
              const container = document.getElementById('cohort-table-container');
              container.innerHTML = '';
+             
+             if (!data || data.length === 0) {
+                container.innerHTML = `<p class="text-center py-4 text-slate-500">No hay datos de lealtad para mostrar. Cargue un archivo para generar el análisis.</p>`;
+                return;
+             }
+             
              const table = document.createElement('table');
              table.className = 'min-w-full divide-y divide-slate-200 cohort-table';
              const maxMonths = Math.max(...data.map(d => d.retention.length));
@@ -453,4 +480,6 @@
     </script>
 </body>
 </html>
+
+
 
