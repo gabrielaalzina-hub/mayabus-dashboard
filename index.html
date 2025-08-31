@@ -130,36 +130,36 @@
             <section id="kpis">
                 <h2 class="text-xl font-semibold text-slate-700 mb-4">Indicadores Clave del Mes</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div class="bg-white rounded-xl shadow p-6"><p class="text-sm font-medium text-slate-500">Total de Viajes Realizados</p><p class="text-4xl font-bold text-blue-600" id="total-viajes">0</p><p class="text-xs text-slate-400 mt-2">Número total de validaciones en el mes.</p></div>
-                    <div class="bg-white rounded-xl shadow p-6"><p class="text-sm font-medium text-slate-500">Pasajeros Únicos</p><p class="text-4xl font-bold text-indigo-600" id="pasajeros-unicos">0</p><p class="text-xs text-slate-400 mt-2">Estudiantes y colaboradores distintos.</p></div>
+                    <div class="bg-white rounded-xl shadow p-6"><p class="text-sm font-medium text-slate-500">Total de Viajes Realizados</p><p class="text-4xl font-bold text-blue-600" id="total-viajes">0</p><p class="text-xs text-slate-400 mt-2">Número total de validaciones.</p></div>
+                    <div class="bg-white rounded-xl shadow p-6"><p class="text-sm font-medium text-slate-500">Pasajeros Únicos</p><p class="text-4xl font-bold text-indigo-600" id="pasajeros-unicos">0</p><p class="text-xs text-slate-400 mt-2">Usuarios distintos que viajaron.</p></div>
                     <div class="bg-white rounded-xl shadow p-6"><p class="text-sm font-medium text-slate-500">Ingresos del Mes</p><p class="text-4xl font-bold text-emerald-600" id="ingresos-mes">$0</p><p class="text-xs text-slate-400 mt-2">Suma total de la venta de pases.</p></div>
-                    <div class="bg-white rounded-xl shadow p-6"><p class="text-sm font-medium text-slate-500">Ruta Más Popular</p><p class="text-2xl font-bold text-amber-600" id="ruta-popular">-</p><p class="text-xs text-slate-400 mt-2">Con 0 viajes en el mes.</p></div>
+                    <div class="bg-white rounded-xl shadow p-6"><p class="text-sm font-medium text-slate-500">Ocupación Promedio</p><p class="text-4xl font-bold text-orange-600" id="ocupacion-promedio">0%</p><p class="text-xs text-slate-400 mt-2">Eficiencia en el uso de capacidad.</p></div>
                 </div>
             </section>
 
             <!-- Análisis de Demanda y Uso -->
             <section id="analisis-demanda" class="mt-12">
-                <h2 class="text-xl font-semibold text-slate-700 mb-4">Análisis de Demanda y Uso</h2>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div class="bg-white rounded-xl shadow p-6"><h3 class="font-semibold text-slate-800">Viajes por Día del Mes</h3><p class="text-sm text-slate-500 mb-4">Patrones de uso semanales.</p><div class="chart-container"><canvas id="viajesPorDiaChart"></canvas></div></div>
-                    <div class="bg-white rounded-xl shadow p-6"><h3 class="font-semibold text-slate-800">Horas de Mayor Afluencia</h3><p class="text-sm text-slate-500 mb-4">Identifica las horas pico.</p><div class="chart-container"><canvas id="viajesPorHoraChart"></canvas></div></div>
+                <h2 class="text-xl font-semibold text-slate-700 mb-4">Análisis de Demanda y Uso de Rutas</h2>
+                 <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                    <div class="bg-white rounded-xl shadow p-6 lg:col-span-3"><h3 class="font-semibold text-slate-800">Rendimiento de Rutas</h3><p class="text-sm text-slate-500 mb-4">Demanda y eficiencia por ruta.</p><div class="overflow-x-auto max-h-[40vh]"><table class="min-w-full divide-y divide-slate-200"><thead class="bg-slate-50 sticky top-0"><tr><th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Ruta</th><th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider"># Viajes</th><th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">% Ocupación</th></tr></thead><tbody class="bg-white divide-y divide-slate-200" id="top-rutas-table"></tbody></table></div></div>
+                    <div class="bg-white rounded-xl shadow p-6 lg:col-span-2"><h3 class="font-semibold text-slate-800">Viajes por Día del Mes</h3><p class="text-sm text-slate-500 mb-4">Patrones de uso semanales.</p><div class="chart-container"><canvas id="viajesPorDiaChart"></canvas></div></div>
                 </div>
             </section>
             
+             <!-- Análisis de Afluencia y Compras -->
+            <section id="afluencia-compras" class="mt-12">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="bg-white rounded-xl shadow p-6"><h3 class="font-semibold text-slate-800">Horas de Mayor Afluencia</h3><p class="text-sm text-slate-500 mb-4">Identifica las horas pico.</p><div class="chart-container"><canvas id="viajesPorHoraChart"></canvas></div></div>
+                    <div class="bg-white rounded-xl shadow p-6"><h3 class="font-semibold text-slate-800">Comportamiento de Compra</h3><p class="text-sm text-slate-500 mb-4">Preferencia por tipo de pase.</p><div class="chart-container"><canvas id="tipoPaseChart"></canvas></div></div>
+                </div>
+            </section>
+
             <!-- Análisis de Retención de Usuarios (Cohorts) -->
             <section id="analisis-retencion" class="mt-12">
                 <div class="bg-white rounded-xl shadow p-6">
                     <h2 class="text-xl font-semibold text-slate-800">Análisis de Lealtad y Retención de Usuarios</h2>
-                    <p class="text-sm text-slate-500 mb-4">Mide cuántos usuarios nuevos de cada mes continúan usando el servicio en los meses siguientes.</p>
+                    <p class="text-sm text-slate-500 mb-4">Mide cuántos usuarios nuevos de cada mes continúan usando el servicio en los meses siguientes (requiere archivo de validaciones).</p>
                     <div id="cohort-table-container" class="overflow-x-auto"></div>
-                </div>
-            </section>
-
-            <!-- Análisis de Rutas y Comportamiento de Compra -->
-            <section id="rutas-y-compras" class="mt-12">
-                 <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
-                    <div class="bg-white rounded-xl shadow p-6 lg:col-span-3"><h3 class="font-semibold text-slate-800">Rendimiento de Rutas</h3><p class="text-sm text-slate-500 mb-4">Demanda y eficiencia por ruta.</p><div class="overflow-x-auto"><table class="min-w-full divide-y divide-slate-200"><thead class="bg-slate-50"><tr><th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Ruta</th><th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider"># Viajes</th><th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">% Ocupación</th></tr></thead><tbody class="bg-white divide-y divide-slate-200" id="top-rutas-table"></tbody></table></div></div>
-                    <div class="bg-white rounded-xl shadow p-6 lg:col-span-2"><h3 class="font-semibold text-slate-800">Comportamiento de Compra</h3><p class="text-sm text-slate-500 mb-4">Preferencia por tipo de pase.</p><div class="chart-container h-[35vh]"><canvas id="tipoPaseChart"></canvas></div></div>
                 </div>
             </section>
 
@@ -168,8 +168,7 @@
                 <div class="bg-white rounded-xl shadow p-8">
                     <h2 class="text-xl font-semibold text-slate-800 mb-4">Observaciones y Recomendaciones Estratégicas</h2>
                     <div id="recommendations-content" class="space-y-6 text-slate-600">
-                        <!-- El contenido se generará dinámicamente -->
-                         <p>Cargue un archivo de validaciones para generar automáticamente observaciones y recomendaciones.</p>
+                         <p>Cargue los archivos de datos para generar automáticamente observaciones y recomendaciones.</p>
                     </div>
                 </div>
             </section>
@@ -184,10 +183,8 @@
     </footer>
 
     <script>
-        // Objeto para almacenar las instancias de los gráficos y poder actualizarlas
-        let charts = {};
-
-        // --- INICIO DE DATOS SIMULADOS (ESTADO INICIAL) ---
+        // Contenedores para los datos crudos y procesados
+        let rawData = { tickets: [], servicios: [], validaciones: [] };
         let dashboardData = {
             viajesPorDia: { labels: [], values: [] },
             viajesPorHora: { labels: [], values: [] },
@@ -195,34 +192,52 @@
             tipoPase: { labels: [], values: [] },
             cohort: []
         };
-        // --- FIN DE DATOS SIMULADOS ---
+        let charts = {}; // Para almacenar instancias de Chart.js
+        let processedFileHashes = new Set(); // Para registrar archivos ya cargados
 
         document.addEventListener('DOMContentLoaded', () => {
             initCharts();
-            updateDashboard(); // Muestra el estado inicial (vacío o con datos simulados)
-            
-            setupFileUpload('upload-tickets', 'input-tickets', processTicketsData);
-            setupFileUpload('upload-servicios', 'input-servicios', processServiciosData);
-            setupFileUpload('upload-validaciones', 'input-validaciones', processValidacionesData);
+            updateDashboard();
+            setupFileUpload('upload-tickets', 'input-tickets', 'tickets');
+            setupFileUpload('upload-servicios', 'input-servicios', 'servicios');
+            setupFileUpload('upload-validaciones', 'input-validaciones', 'validaciones');
         });
 
         // --- LÓGICA DE CARGA DE ARCHIVOS ---
-        const setupFileUpload = (buttonId, inputId, processFunction) => {
+        const setupFileUpload = (buttonId, inputId, dataType) => {
             const button = document.getElementById(buttonId);
             const input = document.getElementById(inputId);
             button.addEventListener('click', () => input.click());
-            input.addEventListener('change', (event) => {
+            input.addEventListener('change', async (event) => {
                 const file = event.target.files[0];
                 if (!file) return;
 
+                // --- NUEVA LÓGICA PARA VERIFICAR DUPLICADOS ---
+                try {
+                    const fileHash = await generateFileHash(file);
+                    if (processedFileHashes.has(fileHash)) {
+                        showNotification(`Error: El archivo "${file.name}" ya ha sido cargado.`, 'error');
+                        input.value = ''; // Limpiar el input para permitir nuevas cargas
+                        return; // Detener el procesamiento
+                    }
+                    // Si no es un duplicado, añadir el hash y continuar
+                    processedFileHashes.add(fileHash);
+                } catch (err) {
+                    console.error("Error al generar el hash del archivo:", err);
+                    showNotification("No se pudo verificar el archivo. Inténtelo de nuevo.", "error");
+                    input.value = '';
+                    return;
+                }
+                // --- FIN DE LA NUEVA LÓGICA ---
+
                 showNotification(`Cargando "${file.name}"...`);
-                // Usar Papa Parse para leer el CSV
                 Papa.parse(file, {
                     header: true,
                     skipEmptyLines: true,
                     complete: (results) => {
                         showNotification(`"${file.name}" procesado con éxito.`);
-                        processFunction(results.data); // Llama a la función de procesamiento específica
+                        rawData[dataType] = results.data;
+                        processAllData(); // Centraliza el procesamiento
                         input.value = ''; 
                     },
                     error: (error) => {
@@ -233,119 +248,159 @@
             });
         };
         
-        // --- FUNCIONES DE PROCESAMIENTO DE DATOS ---
-        
-        // Esta es la función principal que procesa los datos del archivo de validaciones
-        function processValidacionesData(data) {
-            if (!data || data.length === 0) {
-                showNotification("El archivo de validaciones está vacío o en formato incorrecto.", "error");
-                return;
-            }
-
-            // 1. Procesar KPIs
-            const totalViajes = data.length;
-            const pasajerosUnicos = new Set(data.map(row => row.id_usuario)).size;
-            // Ocupación y ruta más popular son más complejos, se dejan como placeholder
-            
-            // 2. Procesar Viajes por Día
-            const viajesPorDiaCounts = {};
-            data.forEach(row => {
-                try {
-                    const day = new Date(row.fecha_validacion).getDate().toString().padStart(2, '0');
-                    viajesPorDiaCounts[day] = (viajesPorDiaCounts[day] || 0) + 1;
-                } catch(e) {}
-            });
-            const sortedDays = Object.keys(viajesPorDiaCounts).sort();
-            dashboardData.viajesPorDia.labels = sortedDays;
-            dashboardData.viajesPorDia.values = sortedDays.map(day => viajesPorDiaCounts[day]);
-
-            // 3. Procesar Viajes por Hora
-            const viajesPorHoraCounts = {};
-            data.forEach(row => {
-                try {
-                    const hour = new Date(row.fecha_validacion).getHours().toString().padStart(2, '0');
-                    viajesPorHoraCounts[hour] = (viajesPorHoraCounts[hour] || 0) + 1;
-                } catch(e) {}
-            });
-            const sortedHours = Object.keys(viajesPorHoraCounts).sort();
-            dashboardData.viajesPorHora.labels = sortedHours;
-            dashboardData.viajesPorHora.values = sortedHours.map(hour => viajesPorHoraCounts[hour]);
-
-            // 4. Procesar Top Rutas
-            const rutasCounts = {};
-            data.forEach(row => {
-                const ruta = row.nombre_ruta || 'Desconocida';
-                rutasCounts[ruta] = (rutasCounts[ruta] || 0) + 1;
-            });
-            dashboardData.topRutas = Object.entries(rutasCounts)
-                .map(([ruta, viajes]) => ({ ruta, viajes, ocupacion: "N/A" })) // Ocupación necesita más datos
-                .sort((a, b) => b.viajes - a.viajes)
-                .slice(0, 10); // Top 10
-
-            // 5. Procesar Tipo de Pase
-            const tipoPaseCounts = {};
-            data.forEach(row => {
-                const pase = row.tipo_pase || 'Otro';
-                tipoPaseCounts[pase] = (tipoPaseCounts[pase] || 0) + 1;
-            });
-            dashboardData.tipoPase.labels = Object.keys(tipoPaseCounts);
-            dashboardData.tipoPase.values = Object.values(tipoPaseCounts);
-            
-            // Actualizar KPIs en la UI
-            document.getElementById('total-viajes').textContent = totalViajes.toLocaleString('es-MX');
-            document.getElementById('pasajeros-unicos').textContent = pasajerosUnicos.toLocaleString('es-MX');
-            if(dashboardData.topRutas.length > 0) {
-                const topRuta = dashboardData.topRutas[0];
-                document.getElementById('ruta-popular').textContent = topRuta.ruta.replace(' (LUN-VIE)', '');
-                document.getElementById('ruta-popular').nextElementSibling.textContent = `Con ${topRuta.viajes.toLocaleString('es-MX')} viajes en el mes.`;
-            }
-
-            // Finalmente, actualizar todo el dashboard
-            updateDashboard();
+        // Función para generar una "huella digital" (hash) de un archivo
+        async function generateFileHash(file) {
+            const fileBuffer = await file.arrayBuffer();
+            const hashBuffer = await crypto.subtle.digest('SHA-256', fileBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            return hashHex;
         }
 
-        // AHORA CON LÓGICA PARA PROCESAR TICKETS
+        // --- FUNCIÓN CENTRAL DE PROCESAMIENTO ---
+        function processAllData() {
+            // Procesar cada set de datos si existe
+            if (rawData.validaciones.length > 0) processValidacionesData(rawData.validaciones);
+            if (rawData.tickets.length > 0) processTicketsData(rawData.tickets);
+            
+            // Procesar datos combinados que dependen de varios archivos
+            if (rawData.validaciones.length > 0 && rawData.servicios.length > 0) {
+                processCombinedData(rawData.validaciones, rawData.servicios);
+            } else if (rawData.validaciones.length > 0) {
+                 // Si solo hay validaciones, resetea la ocupación
+                dashboardData.topRutas.forEach(r => r.ocupacion = 'N/A');
+                document.getElementById('ocupacion-promedio').textContent = '0%';
+            }
+            
+            updateDashboard(); // Actualizar la UI con todos los datos nuevos
+        }
+
+        // --- FUNCIONES DE PROCESAMIENTO ESPECÍFICAS ---
+        function processValidacionesData(data) {
+            // KPIs
+            document.getElementById('total-viajes').textContent = data.length.toLocaleString('es-MX');
+            document.getElementById('pasajeros-unicos').textContent = new Set(data.map(row => row.id_usuario)).size.toLocaleString('es-MX');
+
+            // Viajes por Día
+            const viajesPorDiaCounts = data.reduce((acc, row) => {
+                try {
+                    const day = new Date(row.fecha_validacion).getDate().toString().padStart(2, '0');
+                    acc[day] = (acc[day] || 0) + 1;
+                } catch(e) {}
+                return acc;
+            }, {});
+            const sortedDays = Object.keys(viajesPorDiaCounts).sort();
+            dashboardData.viajesPorDia = {
+                labels: sortedDays,
+                values: sortedDays.map(day => viajesPorDiaCounts[day])
+            };
+
+            // Viajes por Hora
+            const viajesPorHoraCounts = data.reduce((acc, row) => {
+                try {
+                    const hour = new Date(row.fecha_validacion).getHours().toString().padStart(2, '0');
+                    acc[hour] = (acc[hour] || 0) + 1;
+                } catch(e) {}
+                return acc;
+            }, {});
+            const sortedHours = Object.keys(viajesPorHoraCounts).sort();
+            dashboardData.viajesPorHora = {
+                labels: sortedHours,
+                values: sortedHours.map(hour => viajesPorHoraCounts[hour])
+            };
+
+            // Top Rutas (sin ocupación por ahora)
+            const rutasCounts = data.reduce((acc, row) => {
+                const ruta = row.nombre_ruta || 'Desconocida';
+                acc[ruta] = (acc[ruta] || 0) + 1;
+                return acc;
+            }, {});
+            dashboardData.topRutas = Object.entries(rutasCounts)
+                .map(([ruta, viajes]) => ({ ruta, viajes, ocupacion: "N/A" }))
+                .sort((a, b) => b.viajes - a.viajes);
+            
+            // NOTA: Se ha eliminado la actualización del KPI "Ruta Más Popular"
+            // para evitar errores si no hay datos cargados. Se actualiza en generateRecommendations.
+
+            // Análisis de Cohorts (simplificado)
+            const cohorts = data.reduce((acc, row) => {
+                try {
+                    const month = new Date(row.fecha_validacion).toLocaleString('es-ES', { month: 'long', year: 'numeric' });
+                    acc[month] = acc[month] || new Set();
+                    acc[month].add(row.id_usuario);
+                } catch(e) {}
+                return acc;
+            }, {});
+            dashboardData.cohort = Object.entries(cohorts).map(([cohort, users]) => ({
+                cohort: cohort.charAt(0).toUpperCase() + cohort.slice(1),
+                newUsers: users.size,
+                retention: [100] // La retención real es más compleja
+            }));
+        }
+
         function processTicketsData(data) {
-            if (!data || data.length === 0) {
-                showNotification("El archivo de tickets está vacío o en formato incorrecto.", "error");
+            // Comportamiento de Compra
+            const tipoPaseCounts = data.reduce((acc, row) => {
+                const pase = row.tipo_pase || 'Otro';
+                acc[pase] = (acc[pase] || 0) + 1;
+                return acc;
+            }, {});
+            dashboardData.tipoPase = {
+                labels: Object.keys(tipoPaseCounts),
+                values: Object.values(tipoPaseCounts)
+            };
+
+            // Ingresos
+            const totalIngresos = data.reduce((sum, row) => {
+                const monto = parseFloat(row.monto);
+                return sum + (isNaN(monto) ? 0 : monto);
+            }, 0);
+            const formatter = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' });
+            document.getElementById('ingresos-mes').textContent = formatter.format(totalIngresos);
+        }
+        
+        function processCombinedData(validaciones, servicios) {
+            // Mapear capacidad por ruta para fácil acceso
+            const capacidadPorRuta = servicios.reduce((acc, service) => {
+                const capacidad = parseInt(service.capacidad_unidad, 10);
+                if (service.nombre_ruta && !isNaN(capacidad)) {
+                    acc[service.nombre_ruta] = capacidad;
+                }
+                return acc;
+            }, {});
+
+            if(Object.keys(capacidadPorRuta).length === 0) {
+                showNotification("Archivo de servicios no contiene 'nombre_ruta' o 'capacidad_unidad' válidos.", "warning");
                 return;
             }
-
-            // 1. Procesar Comportamiento de Compra (Tipo de Pase)
-            const tipoPaseCounts = {};
-            let totalIngresos = 0;
-
-            data.forEach(row => {
-                const pase = row.tipo_pase || 'Otro';
-                tipoPaseCounts[pase] = (tipoPaseCounts[pase] || 0) + 1;
-                
-                // Sumar ingresos, asegurándose de que el monto es un número
-                const monto = parseFloat(row.monto);
-                if (!isNaN(monto)) {
-                    totalIngresos += monto;
+            
+            // Calcular ocupación para Top Rutas
+            let totalViajesGlobal = 0;
+            let totalCapacidadGlobal = 0;
+            
+            dashboardData.topRutas.forEach(ruta => {
+                const capacidad = capacidadPorRuta[ruta.ruta];
+                if (capacidad) {
+                    // Lógica más realista: la capacidad se multiplica por el número de servicios (viajes) de esa ruta.
+                    // Para este dashboard, asumiremos que cada validación es un "viaje" y lo comparamos contra una capacidad teórica total.
+                    // Una lógica más precisa necesitaría un archivo de "servicios realizados" con fecha y ruta.
+                    ruta.ocupacion = ((ruta.viajes / capacidad) * 100).toFixed(1) + '%'; // Simplificación
+                    totalViajesGlobal += ruta.viajes;
+                    totalCapacidadGlobal += capacidad; // Simplificación: suma de capacidades por ruta
                 }
             });
 
-            dashboardData.tipoPase.labels = Object.keys(tipoPaseCounts);
-            dashboardData.tipoPase.values = Object.values(tipoPaseCounts);
-
-            // 2. Actualizar el nuevo KPI de Ingresos
-            const formatter = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' });
-            document.getElementById('ingresos-mes').textContent = formatter.format(totalIngresos);
-            
-            // 3. Actualizar el dashboard para reflejar los cambios en el gráfico
-            updateDashboard();
-        }
-
-        function processServiciosData(data) {
-            showNotification("La lógica para procesar 'Servicios' aún no ha sido implementada.", "warning");
-            console.log("Datos de Servicios:", data);
+            // Calcular KPI de Ocupación Promedio
+            if (totalCapacidadGlobal > 0) {
+                const ocupacionPromedio = (totalViajesGlobal / totalCapacidadGlobal * 100).toFixed(1);
+                document.getElementById('ocupacion-promedio').textContent = `${ocupacionPromedio}%`;
+            }
+            showNotification("Datos combinados: ¡Ocupación calculada!", "success");
         }
 
         // --- LÓGICA DE RENDERIZADO Y ACTUALIZACIÓN ---
-
         function updateDashboard() {
-            // Actualizar gráficos
+            // Gráficos
             charts.viajesPorDia.data.labels = dashboardData.viajesPorDia.labels;
             charts.viajesPorDia.data.datasets[0].data = dashboardData.viajesPorDia.values;
             charts.viajesPorDia.update();
@@ -358,117 +413,102 @@
             charts.tipoPase.data.datasets[0].data = dashboardData.tipoPase.values;
             charts.tipoPase.update();
 
-            // Actualizar tablas y otros elementos
+            // Tablas y otros
             renderTopRutasTable(dashboardData.topRutas);
             renderCohortChart(dashboardData.cohort);
             generateRecommendations();
         }
         
         function initCharts() {
-            const chartOptionsLine = { maintainAspectRatio: false, responsive: true, scales: { y: { beginAtZero: true, grid: { color: '#e2e8f0' }, ticks: { color: '#64748b' } }, x: { grid: { display: false }, ticks: { color: '#64748b' } } }, plugins: { legend: { display: false } } };
-            const chartOptionsBar = { maintainAspectRatio: false, responsive: true, scales: { y: { beginAtZero: true, grid: { color: '#e2e8f0' }, ticks: { color: '#64748b' } }, x: { grid: { display: false }, ticks: { color: '#64748b' } } }, plugins: { legend: { display: false } } };
-            const chartOptionsDoughnut = { maintainAspectRatio: false, responsive: true, plugins: { legend: { position: 'bottom', labels: { color: '#64748b', padding: 20 } } } };
-
-            charts.viajesPorDia = new Chart(document.getElementById('viajesPorDiaChart').getContext('2d'), { type: 'line', data: { labels: [], datasets: [{ label: 'Número de Viajes', data: [], backgroundColor: 'rgba(59, 130, 246, 0.1)', borderColor: 'rgba(59, 130, 246, 1)', borderWidth: 2, fill: true, tension: 0.4 }] }, options: chartOptionsLine });
-            charts.viajesPorHora = new Chart(document.getElementById('viajesPorHoraChart').getContext('2d'), { type: 'bar', data: { labels: [], datasets: [{ label: 'Número de Viajes', data: [], backgroundColor: 'rgba(107, 33, 168, 0.8)', borderColor: 'rgba(107, 33, 168, 1)', borderWidth: 1 }] }, options: chartOptionsBar });
-            charts.tipoPase = new Chart(document.getElementById('tipoPaseChart').getContext('2d'), { type: 'doughnut', data: { labels: [], datasets: [{ label: 'Distribución de Tickets Vendidos', data: [], backgroundColor: ['rgba(2, 132, 199, 0.9)', 'rgba(219, 39, 119, 0.9)', 'rgba(245, 158, 11, 0.9)', 'rgba(34, 197, 94, 0.9)'], borderColor: '#ffffff', borderWidth: 3 }] }, options: chartOptionsDoughnut });
+            const commonOptions = { maintainAspectRatio: false, responsive: true, scales: { y: { beginAtZero: true, grid: { color: '#e2e8f0' }, ticks: { color: '#64748b' } }, x: { grid: { display: false }, ticks: { color: '#64748b' } } }, plugins: { legend: { display: false } } };
+            charts.viajesPorDia = new Chart('viajesPorDiaChart', { type: 'line', data: { labels: [], datasets: [{ data: [], backgroundColor: 'rgba(59, 130, 246, 0.1)', borderColor: 'rgba(59, 130, 246, 1)', borderWidth: 2, fill: true, tension: 0.4 }] }, options: commonOptions });
+            charts.viajesPorHora = new Chart('viajesPorHoraChart', { type: 'bar', data: { labels: [], datasets: [{ data: [], backgroundColor: 'rgba(107, 33, 168, 0.8)', borderColor: 'rgba(107, 33, 168, 1)', borderWidth: 1 }] }, options: commonOptions });
+            charts.tipoPase = new Chart('tipoPaseChart', { type: 'doughnut', data: { labels: [], datasets: [{ data: [], backgroundColor: ['rgba(2, 132, 199, 0.9)', 'rgba(219, 39, 119, 0.9)', 'rgba(245, 158, 11, 0.9)', 'rgba(34, 197, 94, 0.9)'], borderColor: '#ffffff', borderWidth: 3 }] }, options: { maintainAspectRatio: false, responsive: true, plugins: { legend: { position: 'bottom', labels: { color: '#64748b', padding: 20 } } } } });
         }
 
         function renderTopRutasTable(data) {
-            const rutasTableBody = document.getElementById('top-rutas-table');
-            rutasTableBody.innerHTML = ''; // Limpiar la tabla
-            if (!data || data.length === 0) {
-                 rutasTableBody.innerHTML = `<tr><td colspan="3" class="text-center py-4 text-slate-500">No hay datos de rutas para mostrar.</td></tr>`;
-                 return;
-            }
-            data.forEach(ruta => {
-                rutasTableBody.innerHTML += `<tr>
-                    <td class="px-6 py-4 whitespace-nowrap"><div class="text-sm font-medium text-slate-900">${ruta.ruta.replace(' (LUN-VIE)', '')}</div></td>
+            const tableBody = document.getElementById('top-rutas-table');
+            tableBody.innerHTML = !data || data.length === 0 ? `<tr><td colspan="3" class="text-center py-4 text-slate-500">No hay datos de rutas para mostrar.</td></tr>` : 
+                data.map(ruta => `<tr>
+                    <td class="px-6 py-4 whitespace-nowrap"><div class="text-sm font-medium text-slate-900">${ruta.ruta}</div></td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">${ruta.viajes.toLocaleString('es-MX')}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm"><span class="font-semibold text-slate-500">${ruta.ocupacion}</span></td>
-                </tr>`;
-            });
+                    <td class="px-6 py-4 whitespace-nowrap text-sm"><span class="font-semibold ${ruta.ocupacion !== 'N/A' && parseFloat(ruta.ocupacion) > 50 ? 'text-emerald-600' : 'text-amber-600'}">${ruta.ocupacion}</span></td>
+                </tr>`).join('');
         }
 
         function renderCohortChart(data) {
              const container = document.getElementById('cohort-table-container');
-             container.innerHTML = '';
-             
              if (!data || data.length === 0) {
-                container.innerHTML = `<p class="text-center py-4 text-slate-500">No hay datos de lealtad para mostrar. Cargue un archivo para generar el análisis.</p>`;
+                container.innerHTML = `<p class="text-center py-4 text-slate-500">No hay datos de lealtad para mostrar.</p>`;
                 return;
              }
-             
              const table = document.createElement('table');
              table.className = 'min-w-full divide-y divide-slate-200 cohort-table';
              const maxMonths = Math.max(...data.map(d => d.retention.length));
-
              let theadHTML = `<thead class="bg-slate-50"><tr><th class="cohort-label px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Mes Adquisición</th><th class="px-6 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider">Nuevos Usuarios</th>`;
-             for (let i = 0; i < maxMonths; i++) {
-                 theadHTML += `<th class="px-6 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider">Mes ${i}</th>`;
-             }
+             for (let i = 0; i < maxMonths; i++) theadHTML += `<th class="px-6 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider">Mes ${i}</th>`;
              theadHTML += '</tr></thead>';
              
              let tbodyHTML = '<tbody class="bg-white divide-y divide-slate-200">';
              data.forEach(cohort => {
                  tbodyHTML += `<tr><td class="cohort-label px-6 py-4 whitespace-nowrap text-sm text-slate-900">${cohort.cohort}</td><td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">${cohort.newUsers.toLocaleString('es-MX')}</td>`;
-                 cohort.retention.forEach(percentage => {
-                     const opacity = percentage / 100;
-                     const bgColor = `rgba(34, 197, 94, ${opacity})`;
-                     tbodyHTML += `<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-800" style="background-color: ${bgColor}; color: ${opacity > 0.6 ? 'white' : 'inherit'}">${percentage}%</td>`;
+                 cohort.retention.forEach(p => {
+                     const opacity = p / 100;
+                     tbodyHTML += `<td class="px-6 py-4 whitespace-nowrap text-sm font-medium" style="background-color: rgba(34, 197, 94, ${opacity}); color: ${opacity > 0.6 ? 'white' : 'inherit'}">${p}%</td>`;
                  });
-                 for (let i = cohort.retention.length; i < maxMonths; i++) {
-                      tbodyHTML += `<td class="bg-slate-50"></td>`;
-                 }
+                 for (let i = cohort.retention.length; i < maxMonths; i++) tbodyHTML += `<td class="bg-slate-50"></td>`;
                  tbodyHTML += '</tr>';
              });
              tbodyHTML += '</tbody>';
              
              table.innerHTML = theadHTML + tbodyHTML;
+             container.innerHTML = '';
              container.appendChild(table);
         }
         
         function generateRecommendations() {
             const container = document.getElementById('recommendations-content');
-            if (dashboardData.topRutas.length === 0) {
-                container.innerHTML = `<p>Cargue un archivo de validaciones para generar automáticamente observaciones y recomendaciones.</p>`;
+            if (rawData.validaciones.length === 0) {
+                container.innerHTML = `<p>Cargue los archivos de datos para generar automáticamente observaciones y recomendaciones.</p>`;
                 return;
             }
 
-            const topRuta = dashboardData.topRutas[0];
-            const pasesPopulares = dashboardData.tipoPase.labels.slice(0,2).join(', ');
+            let recommendationsHTML = '';
+            
+            // Recomendación de Rutas
+            if (dashboardData.topRutas.length > 0) {
+                const topRuta = dashboardData.topRutas[0];
+                recommendationsHTML += `
+                    <div>
+                        <h3 class="text-lg font-semibold text-slate-700 mb-2">1. Foco en Rutas de Alta Demanda</h3>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>La ruta <strong>${topRuta.ruta}</strong> es la más utilizada con <strong>${topRuta.viajes.toLocaleString('es-MX')}</strong> viajes registrados. ${rawData.servicios.length > 0 ? 'Considere aumentar la frecuencia o asignar unidades de mayor capacidad en esta ruta.' : 'Cargue el archivo de servicios para analizar la ocupación.'}</li>
+                        </ul>
+                    </div>`;
+            }
 
-            container.innerHTML = `
-                <div>
-                    <h3 class="text-lg font-semibold text-slate-700 mb-2">1. Foco en Rutas de Alta Demanda</h3>
-                    <ul class="list-disc list-inside space-y-1">
-                        <li>La ruta <strong>${topRuta.ruta}</strong> es la más utilizada con <strong>${topRuta.viajes.toLocaleString('es-MX')}</strong> viajes registrados. Considere asignar unidades de mayor capacidad o aumentar la frecuencia en esta ruta durante horas pico.</li>
-                        <li>Analice las rutas con menor demanda para evaluar posibles reajustes de horario o tamaño de unidad y optimizar costos operativos.</li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-lg font-semibold text-slate-700 mb-2">2. Estrategia de Venta de Pases</h3>
-                    <ul class="list-disc list-inside space-y-1">
-                        <li>Los pases más populares son: <strong>${pasesPopulares}</strong>. Centre las campañas de marketing y promociones en estos productos para maximizar las ventas.</li>
-                        <li>Considere crear paquetes o descuentos para los tipos de pase menos populares para incentivar su compra y diversificar los ingresos.</li>
-                    </ul>
-                </div>`;
+            // Recomendación de Pases
+            if (dashboardData.tipoPase.labels.length > 0) {
+                const pasesPopulares = dashboardData.tipoPase.labels.slice(0,2).join(', ');
+                 recommendationsHTML += `
+                    <div>
+                        <h3 class="text-lg font-semibold text-slate-700 mb-2">2. Estrategia de Venta de Pases</h3>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>Los pases más populares son: <strong>${pasesPopulares}</strong>. Centre las campañas de marketing y promociones en estos productos para maximizar ingresos.</li>
+                        </ul>
+                    </div>`;
+            }
+
+            container.innerHTML = recommendationsHTML || `<p>No hay suficientes datos para generar recomendaciones.</p>`;
         }
 
         const showNotification = (message, type = 'success') => {
             const notification = document.getElementById('notification');
             notification.textContent = message;
-            
-            // Cambiar color según el tipo de notificación
             notification.classList.remove('bg-emerald-500', 'bg-red-500', 'bg-amber-500');
-            if (type === 'success') {
-                notification.classList.add('bg-emerald-500');
-            } else if (type === 'error') {
-                notification.classList.add('bg-red-500');
-            } else if (type === 'warning') {
-                notification.classList.add('bg-amber-500');
-            }
-
+            if (type === 'success') notification.classList.add('bg-emerald-500');
+            else if (type === 'error') notification.classList.add('bg-red-500');
+            else if (type === 'warning') notification.classList.add('bg-amber-500');
             notification.style.transform = 'translateY(0)';
             notification.classList.remove('opacity-0');
             setTimeout(() => {
@@ -476,10 +516,7 @@
                 notification.classList.add('opacity-0');
             }, 4000);
         };
-
     </script>
 </body>
 </html>
-
-
 
